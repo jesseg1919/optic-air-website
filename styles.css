@@ -1064,3 +1064,20 @@ section { padding: var(--section-y) 0; }
   .hero h1, h1 { font-size: 26px; }
   .wrap { padding-left: 14px; padding-right: 14px; }
 }
+
+/* Make grid columns actually shrink below their content's intrinsic width.
+   1fr ≡ minmax(auto, 1fr) by default, which lets text + form fields force
+   the column wider than the viewport. minmax(0, 1fr) clamps to 0 min. */
+@media (max-width: 760px) {
+  .hero .hero-grid { grid-template-columns: minmax(0, 1fr); }
+  .hero-right, .lead-card { width: 100%; min-width: 0; max-width: 100%; }
+  .lead-card .row2 { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+  .lead-card input, .lead-card select { width: 100%; min-width: 0; box-sizing: border-box; }
+  /* Headline can long-word wrap without horizontal scroll */
+  .hero h1, h1 { overflow-wrap: anywhere; word-break: break-word; }
+  /* Stats row never exceeds viewport */
+  .hero-stats { width: 100%; min-width: 0; flex-wrap: wrap; }
+  .hero-stats .stat { flex: 1 1 30%; min-width: 0; }
+  /* Any direct child of the hero wrap clamped */
+  .hero .wrap, .hero .hero-grid > * { min-width: 0; max-width: 100%; }
+}
