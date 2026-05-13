@@ -406,10 +406,10 @@ section { padding: var(--section-y) 0; }
 .feature-row.reverse > :first-child { order: 2; }
 @media (max-width: 920px) { .feature-row, .feature-row.reverse { grid-template-columns: 1fr; } .feature-row.reverse > :first-child { order: 0; } }
 .feature-row h2 { margin-bottom: 18px; }
-.feature-row .checklist { display: grid; grid-template-columns: 1fr 1fr; gap: 12px 22px; margin-top: 26px; }
+.feature-row .checklist { display: grid; grid-template-columns: 1fr 1fr; gap: 14px 32px; margin-top: 26px; }
 @media (max-width: 540px) { .feature-row .checklist { grid-template-columns: 1fr; } }
-.feature-row .checklist li { list-style: none; display: flex; gap: 10px; align-items: flex-start; font-size: 15px; color: var(--c-ink-2); }
-.feature-row .checklist li svg { flex-shrink: 0; color: var(--cool); margin-top: 4px; }
+.feature-row .checklist li { list-style: none; display: grid; grid-template-columns: 18px 1fr; gap: 12px; align-items: start; font-size: 15px; line-height: 1.5; color: var(--c-ink-2); }
+.feature-row .checklist li svg { width: 18px; height: 18px; color: var(--cool); margin-top: 3px; }
 
 /* Photo placeholder */
 .photo {
@@ -957,127 +957,3 @@ section { padding: var(--section-y) 0; }
 [data-corners="sharp"] { --radius: 4px; --radius-sm: 2px; --radius-lg: 6px; }
 [data-corners="round"] { --radius: 14px; --radius-sm: 8px; --radius-lg: 22px; }
 [data-corners="pill"]  { --radius: 22px; --radius-sm: 14px; --radius-lg: 32px; }
-
-/* ============================================================================
-   Mobile responsive pass
-   - Hamburger menu below 760px
-   - Hide horizontal-overflow elements
-   - Scale hero headline at narrow widths
-   - Force overflow-x: hidden on body as a safety net
-   ============================================================================ */
-
-/* Hamburger button — only renders on mobile */
-.hamburger {
-  display: none;
-  background: none;
-  border: 0;
-  padding: 8px;
-  cursor: pointer;
-  width: 44px;
-  height: 44px;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 5px;
-  margin-left: auto;
-}
-.hamburger span {
-  display: block;
-  width: 24px;
-  height: 2px;
-  background: var(--c-ink, #111);
-  border-radius: 2px;
-  transition: transform 0.2s ease, opacity 0.2s ease;
-}
-.hamburger.is-open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
-.hamburger.is-open span:nth-child(2) { opacity: 0; }
-.hamburger.is-open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
-
-/* The .nav-cta inline phone link only shows inside the mobile drawer */
-.nav .nav-cta { display: none; }
-
-@media (max-width: 760px) {
-  html, body { overflow-x: hidden; }
-  body, #root { max-width: 100vw; }
-
-  /* Header layout becomes wrap-friendly */
-  .site-header .wrap {
-    height: auto;
-    min-height: 64px;
-    padding-top: 10px;
-    padding-bottom: 10px;
-    flex-wrap: wrap;
-    gap: 8px;
-  }
-  .site-header .logo img { height: 30px; }
-
-  /* Hide the desktop CTA bundle (phone + Book online) — the drawer below
-     contains the same phone link, and the hero already has a Book online CTA. */
-  .site-header .header-cta { display: none; }
-
-  /* Show the hamburger button */
-  .hamburger { display: flex; }
-
-  /* Nav becomes a drawer that drops below the logo row when opened */
-  .site-header .nav {
-    display: none;
-    width: 100%;
-    flex-direction: column;
-    align-items: stretch;
-    gap: 2px;
-    padding: 6px 0 10px;
-    margin-top: 4px;
-    border-top: 1px solid var(--c-line, rgba(0,0,0,0.08));
-  }
-  .site-header .nav.nav-open { display: flex; }
-  .site-header .nav a {
-    padding: 12px 6px;
-    font-size: 16px;
-    border-radius: 8px;
-  }
-  .site-header .nav a.active { background: var(--c-bg-2, rgba(0,0,0,0.04)); }
-  .site-header .nav .nav-cta {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    margin-top: 6px;
-    padding: 12px 6px;
-    font-weight: 600;
-    color: var(--c-blue, #1E9CD7);
-  }
-
-  /* Hero headline scales to viewport so it never gets clipped */
-  .hero h1, h1 { font-size: clamp(28px, 8.5vw, 44px); letter-spacing: -0.02em; }
-  .hero p.lede, .hero .lede { font-size: 15px; }
-
-  /* Stats row — keep on one line by shrinking, wrap if needed */
-  .hero-stats { flex-wrap: wrap; gap: 16px; }
-  .hero-stats .stat { min-width: 0; }
-  .hero-stats .stat .n { font-size: 22px; }
-
-  /* Generic horizontal-overflow safety: any direct child of body / wrap
-     that picked up an implicit min-content width gets max-width clamped. */
-  .wrap, section, .hero, .hero-grid, .hero-right { max-width: 100%; }
-}
-
-@media (max-width: 420px) {
-  .hero h1, h1 { font-size: 26px; }
-  .wrap { padding-left: 14px; padding-right: 14px; }
-}
-
-/* Make grid columns actually shrink below their content's intrinsic width.
-   1fr ≡ minmax(auto, 1fr) by default, which lets text + form fields force
-   the column wider than the viewport. minmax(0, 1fr) clamps to 0 min. */
-@media (max-width: 760px) {
-  .hero .hero-grid { grid-template-columns: minmax(0, 1fr); }
-  .hero-right, .lead-card { width: 100%; min-width: 0; max-width: 100%; }
-  .lead-card .row2 { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
-  .lead-card input, .lead-card select { width: 100%; min-width: 0; box-sizing: border-box; }
-  /* Headline can long-word wrap without horizontal scroll */
-  .hero h1, h1 { overflow-wrap: anywhere; word-break: break-word; }
-  /* Stats row never exceeds viewport */
-  .hero-stats { width: 100%; min-width: 0; flex-wrap: wrap; }
-  .hero-stats .stat { flex: 1 1 30%; min-width: 0; }
-  /* Any direct child of the hero wrap clamped */
-  .hero .wrap, .hero .hero-grid > * { min-width: 0; max-width: 100%; }
-}

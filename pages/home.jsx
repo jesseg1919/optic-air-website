@@ -12,12 +12,12 @@ function HomePage({ navigate, t }) {
             <div>
               <div className="eyebrow">Ottawa & Surrounding Areas</div>
               <h1 style={{ marginTop: 22 }}>
-                Honest heating and<br />
-                <span className="word-warm">air&nbsp;conditioning</span><br />
-                for Ottawa & Surrounding Area.
+                Where comfort meets<br />
+                <span className="word-warm">quality</span> — every<br />
+                season, every system.
               </h1>
               <p className="lede">
-                Heating, air conditioning and ventilation — maintained, repaired and installed by a locally-owned team that picks up the phone.
+                Expert HVAC solutions in Ottawa. Heating, air conditioning and ventilation — maintained, repaired and installed by a locally-owned team with 15+ years of experience and a real person on the phone.
               </p>
               <div className="ctas">
                 <a className="btn btn-primary" href="#contact" onClick={(e) => { e.preventDefault(); navigate('contact'); }}>
@@ -57,8 +57,8 @@ function HomePage({ navigate, t }) {
         <div className="wrap">
           <SectionHead
             eyebrow="What we do"
-            title="Two things, done properly."
-            sub="Residential heating and air conditioning are our day-job. We maintain, repair, install and replace — whether your system is a year old or twenty."
+            title="Comprehensive HVAC, done properly."
+            sub="From furnace tune-ups to full system installs, we keep your home running smoothly year-round. Furnaces, boilers, heat pumps, air conditioners and ventilation — handled by technicians who get it right the first time."
           />
           <div className="svc-grid">
             <article className="svc-card" data-tone="warm">
@@ -121,9 +121,9 @@ function HomePage({ navigate, t }) {
           <div className="feature-row">
             <div>
               <div className="eyebrow">Why Optic Air</div>
-              <h2 style={{ marginTop: 16 }}>The local team people actually recommend.</h2>
+              <h2 style={{ marginTop: 16 }}>Quality service, responsive team — the local crew people actually recommend.</h2>
               <p style={{ marginTop: 18, fontSize: 17 }}>
-                We started Optic Air because too many HVAC calls felt like a sales pitch. We do it differently — direct communication, honest recommendations, fair pricing, and the same technician you spoke to on the phone showing up at your door.
+                With 15+ years in residential and commercial HVAC, we built Optic Air on a simple idea: efficient, friendly, responsive service — without the sales pitch. You get direct communication, honest recommendations, fair pricing, and the same technician you spoke to on the phone at your door. HVAC issues don't wait for business hours, so neither do we.
               </p>
               <ul className="checklist">
                 <li><Icon.Check /> Owner-operated, locally owned</li>
@@ -149,7 +149,7 @@ function HomePage({ navigate, t }) {
           <SectionHead
             eyebrow="How it works"
             title="From first call to comfortable home — in four steps."
-            sub="No mystery, no waiting on hold. Here's exactly what happens when you book Optic Air."
+            sub="Booking, scheduling and payment all happen online through our client hub — or call and reach a real person. Either way, no mystery and no hold music."
           />
           <div className="process">
             <div className="step">

@@ -111,45 +111,30 @@ const Icon = {
 
 // ── Header ────────────────────────────────────────────────────────────────
 function Header({ page, navigate }) {
-  const [menuOpen, setMenuOpen] = React.useState(false);
-  // Close the mobile drawer whenever the user navigates to a new page.
-  React.useEffect(() => { setMenuOpen(false); }, [page]);
-  function go(id) { navigate(id); setMenuOpen(false); }
   return (
-    <header className={`site-header ${menuOpen ? 'menu-open' : ''}`}>
+    <header className="site-header">
       <div className="wrap">
-        <a href="#home" className="logo" onClick={(e) => { e.preventDefault(); go('home'); }}>
+        <a href="#home" className="logo" onClick={(e) => { e.preventDefault(); navigate('home'); }}>
           <img src="assets/logo.png" alt="Optic Air" />
         </a>
-        <nav className={`nav ${menuOpen ? 'nav-open' : ''}`}>
+        <nav className="nav">
           {NAV_ITEMS.map((it) => (
             <a key={it.id} href={`#${it.id}`}
                className={page === it.id ? 'active' : ''}
-               onClick={(e) => { e.preventDefault(); go(it.id); }}>
+               onClick={(e) => { e.preventDefault(); navigate(it.id); }}>
               {it.label}
             </a>
           ))}
-          <a className="nav-cta" href={`tel:${BIZ.phoneRaw}`}>
-            <Icon.Phone /> {BIZ.phone}
-          </a>
         </nav>
         <div className="header-cta">
           <a className="header-phone" href={`tel:${BIZ.phoneRaw}`}>
             <Icon.Phone /> {BIZ.phone}
           </a>
           <a className="btn btn-primary" href="#contact"
-             onClick={(e) => { e.preventDefault(); go('contact'); }}>
+             onClick={(e) => { e.preventDefault(); navigate('contact'); }}>
             Book online <Icon.Arrow className="arrow" />
           </a>
         </div>
-        <button
-          className={`hamburger ${menuOpen ? 'is-open' : ''}`}
-          aria-label={menuOpen ? 'Close menu' : 'Open menu'}
-          aria-expanded={menuOpen}
-          onClick={() => setMenuOpen(o => !o)}
-        >
-          <span /><span /><span />
-        </button>
       </div>
     </header>
   );
