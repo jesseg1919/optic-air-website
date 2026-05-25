@@ -395,7 +395,15 @@ section { padding: var(--section-y) 0; }
 .svc-card ul li { display: flex; gap: 10px; align-items: center; }
 .svc-card ul li::before { content: ""; width: 5px; height: 5px; border-radius: 50%; background: var(--c-ink-3); }
 .svc-card .card-foot { margin-top: auto; padding-top: 24px; }
-.svc-card .price { font-size: 12px; color: var(--c-ink-3); letter-spacing: .04em; text-transform: uppercase; font-weight: 700; }
+.svc-card .price {
+  display: inline-flex; align-items: center;
+  background: var(--c-orange); color: #FFFFFF;
+  padding: 10px 16px; border-radius: 999px;
+  font-size: 12px; letter-spacing: .04em; text-transform: uppercase; font-weight: 700;
+  box-shadow: 0 6px 16px -8px color-mix(in oklab, var(--c-orange) 70%, black);
+  transition: background-color .25s ease, transform .25s ease, box-shadow .25s ease;
+}
+.svc-card .price:hover { background: var(--c-orange-deep); transform: translateY(-1px); box-shadow: 0 10px 22px -10px color-mix(in oklab, var(--c-orange) 75%, black); }
 
 /* Feature row */
 .feature-row {
@@ -491,7 +499,7 @@ section { padding: var(--section-y) 0; }
 .dark-section .section-head .sub { color: rgba(232,229,220,.72); }
 .dark-section .crumbs span { color: #fff; }
 .dark-section .crumbs { color: rgba(232,229,220,.5); }
-.dark-section .price { color: rgba(232,229,220,.55); }
+.dark-section .price { color: #FFFFFF; background: var(--c-orange); }
 .dark-section .card-foot { color: rgba(232,229,220,.72); }
 .dark-section .stat .n { color: #fff; }
 .dark-section .stat .l { color: rgba(232,229,220,.55); }
