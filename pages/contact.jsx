@@ -272,7 +272,7 @@ function ContactPage({ navigate }) {
               { i: <Icon.Phone/>, l: 'Call', v: BIZ.phone, h: `tel:${BIZ.phoneRaw}` },
               { i: <Icon.Mail/>, l: 'Email', v: BIZ.email, h: `mailto:${BIZ.email}` },
               { i: <Icon.Pin/>, l: 'Visit', v: BIZ.address, h: '#' },
-              { i: <Icon.Clock/>, l: 'Hours', v: 'Mon–Fri 7am–6pm · 24/7 emergency', h: '#' },
+              { i: <Icon.Clock/>, l: 'Hours', v: 'Mon–Fri 8am–5pm · 24/7 emergency line', h: '#' },
             ].map((c, i) => (
               <a key={i} href={c.h} style={{ padding: 24, background: 'var(--c-bg-2)', borderRadius: 'var(--radius-lg)', display: 'flex', flexDirection: 'column', gap: 12 }}>
                 <div style={{ width: 40, height: 40, borderRadius: 10, background: 'var(--c-card)', border: '1px solid var(--c-line)', display: 'grid', placeItems: 'center', color: 'var(--accent)' }}>{c.i}</div>

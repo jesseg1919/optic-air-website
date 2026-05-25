@@ -28,6 +28,39 @@ function CoolingPage({ navigate }) {
         </div>
       </section>
 
+      {/* Equipment we work on */}
+      <section style={{ paddingBottom: 0 }}>
+        <div className="wrap">
+          <SectionHead
+            eyebrow="Equipment"
+            title="What we install & service."
+          />
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 18 }}>
+            <div style={{ padding: 28, background: 'var(--c-card)', border: '1px solid var(--c-line)', borderRadius: 'var(--radius-lg)' }}>
+              <div className="eyebrow" style={{ color: 'var(--cool)' }}>Residential — main focus</div>
+              <h3 style={{ fontSize: 20, marginTop: 12 }}>Homes across Ottawa</h3>
+              <ul className="checklist" style={{ marginTop: 16 }}>
+                <li><Icon.Check/> Central Air Conditioners</li>
+                <li><Icon.Check/> Heat Pumps</li>
+                <li><Icon.Check/> Ductless Mini-Splits</li>
+                <li><Icon.Check/> Air Handlers</li>
+                <li><Icon.Check/> Smart Thermostats</li>
+              </ul>
+            </div>
+            <div style={{ padding: 28, background: 'var(--c-card)', border: '1px solid var(--c-line)', borderRadius: 'var(--radius-lg)' }}>
+              <div className="eyebrow" style={{ color: 'var(--cool)' }}>Commercial</div>
+              <h3 style={{ fontSize: 20, marginTop: 12 }}>Light commercial properties</h3>
+              <ul className="checklist" style={{ marginTop: 16 }}>
+                <li><Icon.Check/> PTACs</li>
+                <li><Icon.Check/> Rooftop units</li>
+                <li><Icon.Check/> Air handlers</li>
+                <li><Icon.Check/> Water-cooled heat pumps</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <section>
         <div className="wrap">
           <SectionHead
@@ -37,19 +70,19 @@ function CoolingPage({ navigate }) {
           />
           <div className="svc-grid">
             {[
-              { icon: <Icon.Tool/>, t: 'AC Tune-Ups', d: 'Pre-season cleaning, coil inspection, refrigerant check and full performance test.', list: ['Coil & condenser clean','Refrigerant pressure check','Capacitor & contactor test'] },
-              { icon: <Icon.Bolt/>, t: 'AC Repair', d: 'From capacitors to compressors — quoted up-front, fixed properly.', list: ['Refrigerant leak repair','Fan motor & blower repair','Thermostat diagnostics'] },
-              { icon: <Icon.Snowflake/>, t: 'New AC Install', d: 'Right-sized, properly-matched cooling for your home — not the biggest unit on the truck.', list: ['Manual J load sizing','High-SEER inverter systems','Heat-pump pairing options'] },
-              { icon: <Icon.Wind/>, t: 'Ductless Mini-Splits', d: 'Cool (or heat) rooms that ducted systems can\'t reach. Quiet, efficient, zoned.', list: ['Single & multi-zone','Garage / basement / addition','Quiet wall & ceiling cassettes'] },
-              { icon: <Icon.Filter/>, t: 'Indoor Air Quality', d: 'Upgrade filtration, dehumidify, and balance airflow for a healthier home.', list: ['MERV upgrades','Dehumidifiers','HEPA filtration'] },
-              { icon: <Icon.Shield/>, t: 'Emergency Cooling', d: 'AC out in a heatwave? We prioritize no-cooling calls and aim for same-day response.', list: ['Same-day priority','Plan-member front of line','Honest repair vs. replace'] },
+              { icon: <Icon.Shield/>, t: 'Emergency Cooling', d: 'AC out in a heatwave? We prioritize no-cooling calls and aim for same-day response.', list: ['Same-day priority','Plan-member front of line','After-hours fee applies'], price: '' },
+              { icon: <Icon.Tool/>, t: 'AC Tune-Ups', d: 'Pre-season cleaning, coil inspection, refrigerant check and full performance test.', list: ['Coil & condenser clean','Refrigerant pressure check','Capacitor & contactor test'], price: 'From $130 + HST' },
+              { icon: <Icon.Bolt/>, t: 'AC Repair', d: 'From capacitors to compressors — quoted up-front, fixed properly.', list: ['Refrigerant leak repair','Fan motor & blower repair','Thermostat diagnostics'], price: 'Residential diagnostic from $110 + HST' },
+              { icon: <Icon.Snowflake/>, t: 'New AC Install', d: 'Right-sized, properly-matched cooling for your home — not the biggest unit on the truck.', list: ['Manual J load sizing','High-SEER inverter systems','Heat-pump pairing options'], price: 'Quoted per project' },
+              { icon: <Icon.Wind/>, t: 'Ductless Mini-Splits', d: 'Cool (or heat) rooms that ducted systems can\'t reach. Quiet, efficient, zoned.', list: ['Single & multi-zone','Garage / basement / addition','Quiet wall & ceiling cassettes'], price: 'Quoted per project' },
+              { icon: <Icon.Filter/>, t: 'Indoor Air Quality', d: 'Upgrade filtration, dehumidify, and balance airflow for a healthier home.', list: ['MERV upgrades','Dehumidifiers','HEPA filtration'], price: 'Pricing varies by system' },
             ].map((s, i) => (
               <article key={i} className="svc-card" data-tone="cool">
                 <div className="icon">{s.icon}</div>
                 <h3>{s.t}</h3>
                 <p>{s.d}</p>
                 <ul>{s.list.map((l,j) => <li key={j}>{l}</li>)}</ul>
-                <div className="card-foot"><span className="price">Tune-up from $149</span></div>
+                <div className="card-foot">{s.price && <span className="price">{s.price}</span>}</div>
               </article>
             ))}
           </div>

@@ -17,7 +17,7 @@ function HomePage({ navigate, t }) {
                 season, every system.
               </h1>
               <p className="lede">
-                Expert HVAC solutions in Ottawa. Heating, air conditioning and ventilation — maintained, repaired and installed by a locally-owned team with 15+ years of experience and a real person on the phone.
+                Expert HVAC solutions in Ottawa. Heating, air conditioning and ventilation — maintained, repaired and installed by a locally-owned team with 15+ years of experience.
               </p>
               <div className="ctas">
                 <a className="btn btn-primary" href="#contact" onClick={(e) => { e.preventDefault(); navigate('contact'); }}>
@@ -98,12 +98,12 @@ function HomePage({ navigate, t }) {
             <article className="svc-card" data-tone="light">
               <div className="icon"><Icon.Wind /></div>
               <h3>Ventilation & Air Quality</h3>
-              <p>HRVs, ERVs, humidifiers and filtration — for cleaner air and a more comfortable home.</p>
+              <p>Humidifiers, air filtration systems, HRVs and ERVs — for cleaner air and a more comfortable home.</p>
               <ul>
-                <li>HRV / ERV service & install</li>
                 <li>Whole-home humidifiers</li>
-                <li>Filtration upgrades</li>
-                <li>Indoor air quality assessments</li>
+                <li>Air filtration systems</li>
+                <li>HRV service & install</li>
+                <li>ERV service & install</li>
               </ul>
               <div className="card-foot">
                 <a className="linklike" href="#contact" onClick={(e) => { e.preventDefault(); navigate('contact'); }}>
@@ -123,7 +123,7 @@ function HomePage({ navigate, t }) {
               <div className="eyebrow">Why Optic Air</div>
               <h2 style={{ marginTop: 16 }}>Quality service, responsive team — the local crew people actually recommend.</h2>
               <p style={{ marginTop: 18, fontSize: 17 }}>
-                With 15+ years in residential and commercial HVAC, we built Optic Air on a simple idea: efficient, friendly, responsive service — without the sales pitch. You get direct communication, honest recommendations, fair pricing, and the same technician you spoke to on the phone at your door. HVAC issues don't wait for business hours, so neither do we.
+                With 15+ years in residential and commercial HVAC, we built Optic Air on a simple idea: efficient, friendly, responsive service — without the sales pitch. You get direct communication, honest recommendations and fair pricing. HVAC issues don't wait for business hours, so neither do we.
               </p>
               <ul className="checklist">
                 <li><Icon.Check /> Owner-operated, locally owned</li>
@@ -149,13 +149,13 @@ function HomePage({ navigate, t }) {
           <SectionHead
             eyebrow="How it works"
             title="From first call to comfortable home — in four steps."
-            sub="Booking, scheduling and payment all happen online through our client hub — or call and reach a real person. Either way, no mystery and no hold music."
+            sub="Booking, scheduling and payment all happen online through our client hub — or give us a call. Either way, no mystery and no hold music."
           />
           <div className="process">
             <div className="step">
               <div className="num">01</div>
               <h4>Book online or call</h4>
-              <p>Pick a time that works for you in the online scheduler — or call and reach a real person.</p>
+              <p>Pick a time that works for you in the online scheduler — or call and we'll get back to you quickly.</p>
             </div>
             <div className="step">
               <div className="num">02</div>
@@ -466,7 +466,7 @@ function GReviewCard({ r }) {
 // ── Hero Lead Card ───────────────────────────────────────────────────────
 function HeroLeadCard({ navigate }) {
   const [sent, setSent] = React.useState(false);
-  const [f, setF] = React.useState({ name: '', phone: '', city: '', service: 'Furnace service', urgency: 'Within a week' });
+  const [f, setF] = React.useState({ name: '', phone: '', city: '', service: 'Furnace service', urgency: 'ASAP (no heat/cool)' });
   const submit = (e) => { e.preventDefault(); setSent(true); };
   if (sent) {
     return (
@@ -486,7 +486,7 @@ function HeroLeadCard({ navigate }) {
   return (
     <div className="lead-card">
       <span className="lead-tag"><Icon.Bolt style={{ width: 12, height: 12 }}/> Free quote · No obligation</span>
-      <h3>Stay ahead of the season with a free HVAC quote.</h3>
+      <h3>Need HVAC service or emergency repair?</h3>
       <p className="sub">Tell us a bit about your home and we'll follow up with honest options — no spam, no pressure.</p>
       <form onSubmit={submit}>
         <div className="field">

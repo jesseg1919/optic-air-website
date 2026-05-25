@@ -14,7 +14,7 @@ const BIZ = {
   email: 'jared.kerr@opticair.ca',
   address: '3 Lundy\'s Lane, Richmond, ON, K0A 2Z0',
   primaryAreas: ['Ottawa', 'Richmond'],
-  secondaryAreas: ['Kanata', 'Stittsville', 'Nepean', 'Barrhaven', 'Manotick'],
+  secondaryAreas: ['Kanata', 'Stittsville', 'Nepean', 'Barrhaven', 'Manotick', 'Gloucester', 'Orleans', 'Greely'],
 };
 
 // ── Icons ────────────────────────────────────────────────────────────────
@@ -170,6 +170,8 @@ function Footer({ navigate }) {
               <li><a href={`tel:${BIZ.phoneRaw}`}>{BIZ.phone}</a></li>
               <li><a href={`mailto:${BIZ.email}`}>{BIZ.email}</a></li>
               <li>{BIZ.address}</li>
+              <li style={{ marginTop: 10 }}><strong style={{ color: 'var(--c-ink)' }}>Hours:</strong> 8am–5pm Mon–Sun</li>
+              <li>24/7 Emergency Available</li>
               <li style={{ marginTop: 8, display: 'flex', gap: 12 }}>
                 <a href="https://www.instagram.com/opticairhvac/" aria-label="Instagram">Instagram</a>
                 <a href="https://www.facebook.com/profile.php?id=61564559587629" aria-label="Facebook">Facebook</a>
@@ -355,8 +357,9 @@ function TrustBar() {
   return (
     <div className="trust-bar">
       <div className="wrap row">
-        <div className="label">Proudly servicing</div>
+        <div className="label">All makes & models — Ruud dealer</div>
         <div className="brands">
+          <div className="brand">Ruud</div>
           <div className="brand" data-b="lennox">Lennox</div>
           <div className="brand" data-b="bosch">BOSCH</div>
           <div className="brand">Carrier</div>

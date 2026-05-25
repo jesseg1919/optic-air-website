@@ -25,6 +25,41 @@ function HeatingPage({ navigate }) {
         </div>
       </section>
 
+      {/* Equipment we work on */}
+      <section style={{ paddingBottom: 0 }}>
+        <div className="wrap">
+          <SectionHead
+            eyebrow="Equipment"
+            title="What we install & service."
+          />
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 18 }}>
+            <div style={{ padding: 28, background: 'var(--c-card)', border: '1px solid var(--c-line)', borderRadius: 'var(--radius-lg)' }}>
+              <div className="eyebrow">Residential — main focus</div>
+              <h3 style={{ fontSize: 20, marginTop: 12 }}>Homes across Ottawa</h3>
+              <ul className="checklist" style={{ marginTop: 16 }}>
+                <li><Icon.Check/> Furnaces</li>
+                <li><Icon.Check/> Boilers</li>
+                <li><Icon.Check/> Heat Pumps</li>
+                <li><Icon.Check/> Water Heaters</li>
+                <li><Icon.Check/> Tankless Water Heaters</li>
+                <li><Icon.Check/> Ductless Systems</li>
+                <li><Icon.Check/> Smart Thermostats</li>
+              </ul>
+            </div>
+            <div style={{ padding: 28, background: 'var(--c-card)', border: '1px solid var(--c-line)', borderRadius: 'var(--radius-lg)' }}>
+              <div className="eyebrow">Commercial</div>
+              <h3 style={{ fontSize: 20, marginTop: 12 }}>Light commercial properties</h3>
+              <ul className="checklist" style={{ marginTop: 16 }}>
+                <li><Icon.Check/> PTACs</li>
+                <li><Icon.Check/> Rooftop units</li>
+                <li><Icon.Check/> Unit heaters</li>
+                <li><Icon.Check/> Tube heaters</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Services list */}
       <section>
         <div className="wrap">
@@ -35,19 +70,19 @@ function HeatingPage({ navigate }) {
           />
           <div className="svc-grid">
             {[
-              { icon: <Icon.Tool/>, t: 'Furnace Maintenance', d: 'Annual tune-ups, safety checks and combustion analysis. Catches problems before they become emergencies.', list: ['Burner inspection','Heat exchanger check','Thermostat & airflow tuning'] },
-              { icon: <Icon.Bolt/>, t: 'Furnace Repair', d: 'Diagnosing and fixing furnaces of every make. Up-front pricing before we start.', list: ['Ignition & gas valve','Inducer & blower motors','Control board diagnostics'] },
-              { icon: <Icon.Flame/>, t: 'New Furnace Install', d: 'High-efficiency furnaces sized properly for your home. Multiple quotes, no pressure.', list: ['Free in-home assessment','Quiet ECM systems','Rebate eligible (when available)'] },
-              { icon: <Icon.Wind/>, t: 'Heat Pumps', d: 'Cold-climate heat pumps for Ottawa winters. Cuts heating bills, doubles as your AC.', list: ['Air-source heat pumps','Dual-fuel hybrid systems','Ductless mini-split'] },
-              { icon: <Icon.Filter/>, t: 'Boilers & Hydronic', d: 'Service, repair and replacement of residential boilers and radiant systems.', list: ['Combi boilers','Hot water tank coil','Zone valve & circulator'] },
-              { icon: <Icon.Shield/>, t: '24/7 Emergency No-Heat', d: 'It\'s -25 and the furnace is out. Call us — someone answers, and someone shows up.', list: ['Same-day response','Service-plan priority','Transparent after-hours rates'] },
+              { icon: <Icon.Shield/>, t: '24/7 Emergency No-Heat', d: 'It\'s -25 and the furnace is out. Call us — we prioritize no-heat calls and aim for same-day response.', list: ['Same-day response','Service-plan priority','After-hours fee applies'], price: '' },
+              { icon: <Icon.Tool/>, t: 'Furnace Maintenance', d: 'Annual tune-ups, safety checks and combustion analysis. Catches problems before they become emergencies.', list: ['Burner inspection','Heat exchanger check','Thermostat & airflow tuning'], price: 'From $130 + HST' },
+              { icon: <Icon.Bolt/>, t: 'Furnace Repair', d: 'Diagnosing and fixing furnaces of every make. Up-front pricing before we start.', list: ['Ignition & gas valve','Inducer & blower motors','Control board diagnostics'], price: 'Residential diagnostic from $110 + HST' },
+              { icon: <Icon.Flame/>, t: 'New Furnace Install', d: 'High-efficiency furnaces sized properly for your home. Multiple quotes, no pressure.', list: ['Free in-home assessment','Quiet ECM systems','Rebate eligible (when available)'], price: 'Quoted per project' },
+              { icon: <Icon.Wind/>, t: 'Heat Pumps', d: 'Cold-climate heat pumps for Ottawa winters. Cuts heating bills, doubles as your AC.', list: ['Air-source heat pumps','Dual-fuel hybrid systems','Ductless mini-split'], price: 'Quoted per project' },
+              { icon: <Icon.Filter/>, t: 'Boilers & Hydronic', d: 'Service, repair and replacement of residential boilers and radiant systems.', list: ['Combi boilers','Hot water tank coil','Zone valve & circulator'], price: 'Pricing varies by system' },
             ].map((s, i) => (
               <article key={i} className="svc-card">
                 <div className="icon">{s.icon}</div>
                 <h3>{s.t}</h3>
                 <p>{s.d}</p>
                 <ul>{s.list.map((l,j) => <li key={j}>{l}</li>)}</ul>
-                <div className="card-foot"><span className="price">Tune-up from $169</span></div>
+                <div className="card-foot">{s.price && <span className="price">{s.price}</span>}</div>
               </article>
             ))}
           </div>
@@ -63,9 +98,7 @@ function HeatingPage({ navigate }) {
               <h2 style={{ marginTop: 16 }}>Signs your heating needs attention.</h2>
               <p style={{ marginTop: 18 }}>Catching trouble early is the difference between a $200 repair and a midwinter replacement. If any of these sound familiar, give us a call.</p>
               <ul className="checklist">
-                <li><Icon.Check/> Uneven room temperatures</li>
                 <li><Icon.Check/> Furnace short-cycling</li>
-                <li><Icon.Check/> Yellow or flickering pilot flame</li>
                 <li><Icon.Check/> Rising heating bills with no change in use</li>
                 <li><Icon.Check/> Strange smells or banging on startup</li>
                 <li><Icon.Check/> System is older than 15 years</li>
