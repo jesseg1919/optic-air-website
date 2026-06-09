@@ -105,7 +105,7 @@ function HeatingPage({ navigate }) {
                 <li><Icon.Check/> System is older than 15 years</li>
               </ul>
             </div>
-            <Photo scene="warm" aspect="4-3" src="assets/technician-heatpump.jpg" alt="OpticAir technician checking refrigerant pressures on an outdoor heat pump"/>
+            <Photo scene="warm" aspect="4-3" src="assets/furnace-service.jpg" alt="OpticAir technician servicing an open high-efficiency furnace in an Ottawa home"/>
           </div>
         </div>
       </section>
