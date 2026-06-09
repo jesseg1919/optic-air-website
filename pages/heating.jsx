@@ -20,7 +20,7 @@ function HeatingPage({ navigate }) {
                 <a className="btn btn-ghost" href={`tel:${BIZ.phoneRaw}`}><Icon.Phone/> {BIZ.phone}</a>
               </div>
             </div>
-            <Photo scene="furnace" aspect="4-3" src="assets/technician-furnace.jpg" alt="Family relaxing with their dog by the fireplace in a cozy Ottawa living room while snow falls outside"/>
+            <Photo scene="furnace" aspect="4-3" src="assets/family-fireplace.jpg" alt="Family relaxing with their dog by the fireplace in a cozy Ottawa living room while snow falls outside"/>
           </div>
         </div>
       </section>
