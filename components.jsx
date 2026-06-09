@@ -111,29 +111,44 @@ const Icon = {
 
 // ── Header ────────────────────────────────────────────────────────────────
 function Header({ page, navigate }) {
+  const [menuOpen, setMenuOpen] = React.useState(false);
+  const go = (id) => { navigate(id); setMenuOpen(false); };
   return (
-    <header className="site-header">
+    <header className={"site-header" + (menuOpen ? " menu-open" : "")}>
       <div className="wrap">
-        <a href="#home" className="logo" onClick={(e) => { e.preventDefault(); navigate('home'); }}>
+        <a href="#home" className="logo" onClick={(e) => { e.preventDefault(); go('home'); }}>
           <img src="assets/logo.png" alt="Optic Air" />
         </a>
-        <nav className="nav">
-          {NAV_ITEMS.map((it) => (
-            <a key={it.id} href={`#${it.id}`}
-               className={page === it.id ? 'active' : ''}
-               onClick={(e) => { e.preventDefault(); navigate(it.id); }}>
-              {it.label}
+        <button
+          className="nav-toggle"
+          type="button"
+          aria-label="Toggle navigation menu"
+          aria-expanded={menuOpen}
+          onClick={() => setMenuOpen((v) => !v)}
+        >
+          <span className="nav-toggle-bar" />
+          <span className="nav-toggle-bar" />
+          <span className="nav-toggle-bar" />
+        </button>
+        <div className="header-menu">
+          <nav className="nav">
+            {NAV_ITEMS.map((it) => (
+              <a key={it.id} href={`#${it.id}`}
+                 className={page === it.id ? 'active' : ''}
+                 onClick={(e) => { e.preventDefault(); go(it.id); }}>
+                {it.label}
+              </a>
+            ))}
+          </nav>
+          <div className="header-cta">
+            <a className="header-phone" href={`tel:${BIZ.phoneRaw}`}>
+              <Icon.Phone /> {BIZ.phone}
             </a>
-          ))}
-        </nav>
-        <div className="header-cta">
-          <a className="header-phone" href={`tel:${BIZ.phoneRaw}`}>
-            <Icon.Phone /> {BIZ.phone}
-          </a>
-          <a className="btn btn-primary" href="#contact"
-             onClick={(e) => { e.preventDefault(); navigate('contact'); }}>
-            Book online <Icon.Arrow className="arrow" />
-          </a>
+            <a className="btn btn-primary" href="#contact"
+               onClick={(e) => { e.preventDefault(); go('contact'); }}>
+              Book online <Icon.Arrow className="arrow" />
+            </a>
+          </div>
         </div>
       </div>
     </header>
@@ -182,6 +197,12 @@ function Footer({ navigate }) {
         <div className="footer-bottom">
           <div>© {new Date().getFullYear()} Optic Air. All rights reserved.</div>
           <div>Licensed & insured · TSSA registered · Locally owned in Richmond, ON</div>
+          <div className="footer-credit">
+            Website Built & Designed by{' '}
+            <a className="footer-credit-logo" href="https://www.pagepros.io" target="_blank" rel="noopener noreferrer" aria-label="Page Pros">
+              <img src="https://cdn.prod.website-files.com/61095209a51f0b4bebf069f7/6759e4859a607f923ace0b7e_LOGO1.png" alt="Page Pros" />
+            </a>
+          </div>
         </div>
       </div>
     </footer>
