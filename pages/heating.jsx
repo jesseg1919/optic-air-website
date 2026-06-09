@@ -20,7 +20,7 @@ function HeatingPage({ navigate }) {
                 <a className="btn btn-ghost" href={`tel:${BIZ.phoneRaw}`}><Icon.Phone/> {BIZ.phone}</a>
               </div>
             </div>
-            <Photo scene="furnace" aspect="4-3" src="assets/technician-furnace.jpg" alt="OpticAir technician servicing a residential furnace in an Ottawa basement"/>
+            <Photo scene="furnace" aspect="4-3" src="assets/technician-furnace.jpg" alt="Family relaxing with their dog by the fireplace in a cozy Ottawa living room while snow falls outside"/>
           </div>
         </div>
       </section>
@@ -44,6 +44,7 @@ function HeatingPage({ navigate }) {
                 <li><Icon.Check/> Tankless Water Heaters</li>
                 <li><Icon.Check/> Ductless Systems</li>
                 <li><Icon.Check/> Smart Thermostats</li>
+                <li><Icon.Check/> Gas Lines</li>
               </ul>
             </div>
             <div style={{ padding: 28, background: 'var(--c-card)', border: '1px solid var(--c-line)', borderRadius: 'var(--radius-lg)' }}>

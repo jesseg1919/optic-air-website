@@ -317,9 +317,9 @@ function BookingWidget({ navigate }) {
   const [time, setTime] = React.useState(null);
 
   const services = [
-    { id: 'furnace-service', t: 'Furnace tune-up', d: '60 min · from $169' },
-    { id: 'furnace-repair', t: 'Furnace repair', d: 'Diagnosis + estimate' },
-    { id: 'ac-service', t: 'AC tune-up', d: '60 min · from $149' },
+    { id: 'furnace-service', t: 'Furnace tune-up', d: '60 min · from $130 + HST' },
+    { id: 'furnace-repair', t: 'Furnace repair', d: 'Diagnostic from $110 + HST' },
+    { id: 'ac-service', t: 'AC tune-up', d: '60 min · from $130 + HST' },
     { id: 'ac-repair', t: 'AC repair', d: 'Diagnosis + estimate' },
     { id: 'new-quote', t: 'New system quote', d: 'Free in-home assessment' },
     { id: 'other', t: 'Something else', d: 'Tell us what\'s up' },

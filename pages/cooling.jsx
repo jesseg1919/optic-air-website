@@ -71,11 +71,11 @@ function CoolingPage({ navigate }) {
           <div className="svc-grid">
             {[
               { icon: <Icon.Shield/>, t: 'Emergency Cooling', d: 'AC out in a heatwave? We prioritize no-cooling calls and aim for same-day response.', list: ['Same-day priority','Plan-member front of line','After-hours fee applies'], price: '' },
-              { icon: <Icon.Tool/>, t: 'AC Tune-Ups', d: 'Pre-season cleaning, coil inspection, refrigerant check and full performance test.', list: ['Coil & condenser clean','Refrigerant pressure check','Capacitor & contactor test'], price: 'From $130 + HST' },
+              { icon: <Icon.Tool/>, t: 'AC Tune-Ups', d: 'Pre-season cleaning, coil inspection, system temperature check and full performance test.', list: ['Coil & condenser clean','System temperature & performance check','Capacitor & contactor test'], price: 'From $130 + HST' },
               { icon: <Icon.Bolt/>, t: 'AC Repair', d: 'From capacitors to compressors — quoted up-front, fixed properly.', list: ['Refrigerant leak repair','Fan motor & blower repair','Thermostat diagnostics'], price: 'Residential diagnostic from $110 + HST' },
-              { icon: <Icon.Snowflake/>, t: 'New AC Install', d: 'Right-sized, properly-matched cooling for your home — not the biggest unit on the truck.', list: ['Manual J load sizing','High-SEER inverter systems','Heat-pump pairing options'], price: 'Quoted per project' },
+              { icon: <Icon.Snowflake/>, t: 'New AC Install', d: 'Right-sized, properly-matched cooling for your home — not the biggest unit on the truck.', list: ['Proper AC sizing for better comfort and efficiency','Quiet & reliable AC systems','Full system startup & performance testing'], price: 'Quoted per project' },
               { icon: <Icon.Wind/>, t: 'Ductless Mini-Splits', d: 'Cool (or heat) rooms that ducted systems can\'t reach. Quiet, efficient, zoned.', list: ['Single & multi-zone','Garage / basement / addition','Quiet wall & ceiling cassettes'], price: 'Quoted per project' },
-              { icon: <Icon.Filter/>, t: 'Indoor Air Quality', d: 'Upgrade filtration, dehumidify, and balance airflow for a healthier home.', list: ['MERV upgrades','Dehumidifiers','HEPA filtration'], price: 'Pricing varies by system' },
+              { icon: <Icon.Filter/>, t: 'Indoor Air Quality', d: 'Upgrade filtration, balance humidity, and improve airflow for a healthier home.', list: ['HRV & ERV systems','Humidifiers','Air filtration systems'], price: 'Pricing varies by system' },
             ].map((s, i) => (
               <article key={i} className="svc-card" data-tone="cool">
                 <div className="icon">{s.icon}</div>
