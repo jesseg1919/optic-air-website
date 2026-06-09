@@ -92,7 +92,7 @@ function CoolingPage({ navigate }) {
       <section style={{ paddingTop: 0 }}>
         <div className="wrap">
           <div className="feature-row reverse">
-            <Photo scene="cool" aspect="4-3" src="assets/heatpump.jpg" alt="Outdoor heat pump condenser installed beside an Ottawa home"/>
+            <Photo scene="cool" aspect="4-3" src="assets/heat-pump-install.jpg" alt="Carrier outdoor heat pump unit installed beside an Ottawa townhome"/>
             <div>
               <div className="eyebrow" style={{ color: 'var(--cool)' }}>Smart cooling</div>
               <h2 style={{ marginTop: 16 }}>Heat pumps cool too — and they're winning the math.</h2>
