@@ -29,3 +29,8 @@ npx vercel
 - `pages/` — page components
 - `assets/` — logo and photos
 - `vercel.json` — serves `.jsx` files with the correct MIME type
+
+
+## Deployment
+
+This site deploys automatically to Vercel from the `main` branch. Push to `main` to publish.
