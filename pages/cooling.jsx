@@ -23,7 +23,7 @@ function CoolingPage({ navigate }) {
                 <a className="btn btn-ghost" href={`tel:${BIZ.phoneRaw}`}><Icon.Phone/> {BIZ.phone}</a>
               </div>
             </div>
-            <Photo scene="ac" aspect="4-3" src="assets/technician-ac.jpg" alt="OpticAir technician servicing an outdoor central AC condenser at an Ottawa home"/>
+            <Photo scene="ac" aspect="4-3" src="assets/ac-condenser.jpg" alt="Ruud central air conditioner condenser installed beside an Ottawa home"/>
           </div>
         </div>
       </section>
