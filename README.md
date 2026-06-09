@@ -34,3 +34,7 @@ npx vercel
 ## Deployment
 
 This site deploys automatically to Vercel from the `main` branch. Push to `main` to publish.
+
+## Style notes
+
+- Service-card price labels render as orange pill badges with white text, via a `<style>` block in `index.html` (selector `.svc-card .card-foot .price`).
