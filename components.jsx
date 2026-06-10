@@ -417,13 +417,34 @@ function CTABanner({ navigate, title = "Comfort that's one call away.", body = "
 }
 
 // ── Lead form (bottom-of-page) ───────────────────────────────────────────
+// Sends a website lead to the serverless function, which creates a Housecall Pro lead.
+async function submitLead(data) {
+  try {
+    const res = await fetch('/api/create-lead', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    });
+    return res.ok;
+  } catch (e) {
+    return false;
+  }
+}
+
 function LeadForm({ eyebrow = "Quick request", title = "Get a fast, honest quote.", sub = "Tell us what's going on — we'll reply within one business hour. No call centers, no pressure.", defaultService = "Furnace service" }) {
   const [submitted, setSubmitted] = React.useState(false);
   const [form, setForm] = React.useState({
     name: '', phone: '', email: '', address: '',
     service: defaultService, notes: '',
   });
-  const onSubmit = (e) => { e.preventDefault(); setSubmitted(true); };
+  const [sending, setSending] = React.useState(false);
+  const onSubmit = async (e) => {
+    e.preventDefault();
+    setSending(true);
+    try { await submitLead({ name: form.name, phone: form.phone, email: form.email, address: form.address, service: form.service, notes: form.notes, page: 'quote-form' }); } catch (err) {}
+    setSending(false);
+    setSubmitted(true);
+  };
 
   return (
     <section className="lead-section">
@@ -487,8 +508,8 @@ function LeadForm({ eyebrow = "Quick request", title = "Get a fast, honest quote
                     <textarea id="lf-notes" rows="3" value={form.notes} onChange={(e)=>setForm({...form, notes: e.target.value})} placeholder="Make / model, urgency, anything else..."/>
                   </div>
                 </div>
-                <button type="submit" className="btn btn-primary" style={{ marginTop: 18, width: '100%', justifyContent: 'center' }}>
-                  Send request <Icon.Arrow className="arrow"/>
+                <button type="submit" className="btn btn-primary" disabled={sending} style={{ marginTop: 18, width: '100%', justifyContent: 'center', opacity: sending ? 0.7 : 1 }}>
+                  {sending ? 'Sending…' : <React.Fragment>Send request <Icon.Arrow className="arrow"/></React.Fragment>}
                 </button>
                 <p className="lead-fineprint">Leads go directly to {BIZ.email} · No spam, ever.</p>
               </form>
@@ -500,4 +521,4 @@ function LeadForm({ eyebrow = "Quick request", title = "Get a fast, honest quote
   );
 }
 
-Object.assign(window, { NAV_ITEMS, BIZ, Icon, Header, Footer, Photo, PhotoScene, SectionHead, TrustBar, CTABanner, LeadForm });
+Object.assign(window, { NAV_ITEMS, BIZ, Icon, Header, Footer, Photo, PhotoScene, SectionHead, TrustBar, CTABanner, LeadForm, submitLead });
