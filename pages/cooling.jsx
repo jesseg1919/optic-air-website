@@ -82,7 +82,10 @@ function CoolingPage({ navigate }) {
                 <h3>{s.t}</h3>
                 <p>{s.d}</p>
                 <ul>{s.list.map((l,j) => <li key={j}>{l}</li>)}</ul>
-                <div className="card-foot">{s.price && <span className="price">{s.price}</span>}</div>
+                <div className="card-foot" style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 14 }}>
+                  {s.price && <span className="price">{s.price}</span>}
+                  <a className="btn btn-primary" href="#contact" onClick={(e)=>{e.preventDefault();navigate('contact');}} style={{ width: '100%', justifyContent: 'center' }}>Book Service Now <Icon.Arrow className="arrow"/></a>
+                </div>
               </article>
             ))}
           </div>
