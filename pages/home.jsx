@@ -467,7 +467,14 @@ function GReviewCard({ r }) {
 function HeroLeadCard({ navigate }) {
   const [sent, setSent] = React.useState(false);
   const [f, setF] = React.useState({ name: '', phone: '', city: '', service: 'Furnace service', urgency: 'ASAP (no heat/cool)' });
-  const submit = (e) => { e.preventDefault(); setSent(true); };
+  const [sending, setSending] = React.useState(false);
+  const submit = async (e) => {
+    e.preventDefault();
+    setSending(true);
+    try { await submitLead({ name: f.name, phone: f.phone, city: f.city, service: f.service, urgency: f.urgency, page: 'home-hero' }); } catch (err) {}
+    setSending(false);
+    setSent(true);
+  };
   if (sent) {
     return (
       <div className="lead-card">
@@ -535,8 +542,8 @@ function HeroLeadCard({ navigate }) {
             </select>
           </div>
         </div>
-        <button type="submit" className="btn btn-primary" style={{ width: '100%', justifyContent: 'center' }}>
-          Request my quote <Icon.Arrow className="arrow"/>
+        <button type="submit" className="btn btn-primary" disabled={sending} style={{ width: '100%', justifyContent: 'center', opacity: sending ? 0.7 : 1 }}>
+          {sending ? 'Sending…' : <React.Fragment>Request my quote <Icon.Arrow className="arrow"/></React.Fragment>}
         </button>
         <div className="trust-line">
           <span className="dot"/> Leads go straight to Jared · usually replies in under an hour
