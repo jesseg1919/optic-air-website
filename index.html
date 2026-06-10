@@ -22,6 +22,10 @@
       text-transform:uppercase;
       line-height:1;
     }
+    /* OpticAir — mobile: stack inline two-column layouts (page heroes, equipment grids, contact info, form rows) */
+    @media (max-width: 760px){
+      [style*="grid-template-columns"]{ grid-template-columns: 1fr !important; }
+    }
   </style>
 </head>
 <body>
