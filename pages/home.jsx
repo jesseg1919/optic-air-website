@@ -476,16 +476,20 @@ function HeroLeadCard({ navigate }) {
     setSent(true);
   };
   if (sent) {
+    const fn = f.name && f.name.trim() ? f.name.trim().split(' ')[0] : '';
     return (
       <div className="lead-card">
         <div className="lead-success">
           <div className="ok-mark"><Icon.Check style={{ width: 24, height: 24 }}/></div>
-          <h3 style={{ fontSize: 22 }}>Got it{f.name ? `, ${f.name.split(' ')[0]}` : ''}.</h3>
-          <p style={{ marginTop: 10, fontSize: 14 }}>
-            We'll call <strong style={{ color: 'var(--c-ink)' }}>{f.phone || 'you'}</strong> within the hour during business hours.
-            <br/>Need help now? <a href={`tel:${BIZ.phoneRaw}`} style={{ color: 'var(--accent)', fontWeight: 700 }}>{BIZ.phone}</a>
-          </p>
-          <button className="btn btn-ghost" style={{ marginTop: 20 }} onClick={() => setSent(false)}>Send another</button>
+          <h3 style={{ fontSize: 20 }}>Request received{fn ? ', ' + fn : ''}.</h3>
+          <p style={{ marginTop: 4, fontSize: 13.5 }}>Here's what happens next.</p>
+          <ol className="next-steps" style={{ textAlign: 'left', margin: '14px 0 6px' }}>
+            <li><span className="ns-num">1</span><div><h4>Request received</h4><p>It just landed with our team.</p></div></li>
+            <li><span className="ns-num">2</span><div><h4>We reach out</h4><p>We'll call {f.phone || 'you'} within the hour during business hours.</p></div></li>
+            <li><span className="ns-num">3</span><div><h4>We get you booked</h4><p>Honest options, up-front pricing, a time that works.</p></div></li>
+          </ol>
+          <p style={{ fontSize: 13 }}>Need help now? <a href={'tel:' + BIZ.phoneRaw} style={{ color: 'var(--accent)', fontWeight: 700 }}>{BIZ.phone}</a></p>
+          <button className="btn btn-ghost" style={{ marginTop: 12 }} onClick={() => setSent(false)}>Send another</button>
         </div>
       </div>
     );
