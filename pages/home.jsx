@@ -270,7 +270,7 @@ const PLANS = [
   },
 ];
 
-function PlansBlock({ navigate }) {
+function PlansBlock({ navigate, onChoosePlan }) {
   return (
     <div className="plans">
       {PLANS.map((p, i) => (
@@ -291,7 +291,7 @@ function PlansBlock({ navigate }) {
           <div className="plan-cta">
             <a className={p.featured ? 'btn btn-primary' : 'btn btn-dark'}
                style={{ width: '100%', justifyContent: 'center' }}
-               href="#contact" onClick={(e) => { e.preventDefault(); navigate && navigate('contact'); }}>
+               href={onChoosePlan ? '#plan-form' : '#contact'} onClick={(e) => { e.preventDefault(); if (onChoosePlan) { onChoosePlan(p.name); } else { navigate && navigate('contact'); } }}>
               {p.cta} <Icon.Arrow className="arrow" />
             </a>
           </div>
