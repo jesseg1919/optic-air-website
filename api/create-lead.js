@@ -37,12 +37,14 @@ module.exports = async function handler(req, res) {
     return res.status(200).json({ ok: true, delivered: false });
   }
 
-  const customer = { first_name, notifications_enabled: false, lead_source: 'Website' };
+  const customer = { first_name, notifications_enabled: false };
   if (last_name) customer.last_name = last_name;
   if (email) customer.email = email;
   if (phone) customer.mobile_number = phone;
 
-  const payload = { customer, lead_source: 'OpticAir Website', note };
+  const payload = { customer, note };
+  const leadSource = process.env.HCP_LEAD_SOURCE;
+  if (leadSource) payload.lead_source = leadSource;
   if (address || city) {
     payload.address = {};
     if (address) payload.address.street = address;
