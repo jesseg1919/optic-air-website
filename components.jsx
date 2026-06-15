@@ -472,8 +472,13 @@ function LeadForm({ eyebrow = "Quick request", title = "Get a fast, honest quote
             {submitted ? (
               <div className="lead-success">
                 <div className="lead-check"><Icon.Check style={{ width: 28, height: 28 }}/></div>
-                <h3>Thanks {form.name || 'there'} — got it.</h3>
-                <p>We'll be in touch shortly at {form.phone || form.email || 'the contact details you provided'}.</p>
+                <h3>Request received{form.name && form.name.trim() ? ', ' + form.name.trim().split(' ')[0] : ''}.</h3>
+                <p>Here's exactly what happens next.</p>
+                <ol className="next-steps" style={{ width: '100%', textAlign: 'left', margin: '6px 0 0' }}>
+                  <li><span className="ns-num">1</span><div><h4>Request received</h4><p>Your request just landed with our team — nothing more you need to do.</p></div></li>
+                  <li><span className="ns-num">2</span><div><h4>We reach out</h4><p>We'll contact you within one business day — usually within the hour during business hours.</p></div></li>
+                  <li><span className="ns-num">3</span><div><h4>We get you booked</h4><p>We confirm pricing, answer your questions, and schedule your visit or send your quote.</p></div></li>
+                </ol>
                 <button type="button" className="btn btn-ghost" onClick={() => setSubmitted(false)}>Send another</button>
               </div>
             ) : (
