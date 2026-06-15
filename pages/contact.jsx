@@ -160,26 +160,68 @@ function ServiceAreaMap() {
 }
 
 function ContactPage({ navigate }) {
+  const SERVICES = [
+    'Furnace service','Furnace repair (no heat)','New furnace quote',
+    'AC service','AC repair','New AC / heat pump quote',
+    'Service plan signup','Light commercial inquiry','Other'
+  ];
   const [submitted, setSubmitted] = React.useState(false);
+  const [sending, setSending] = React.useState(false);
+  const [errors, setErrors] = React.useState({});
   const [form, setForm] = React.useState({
     name: '', phone: '', email: '', address: '',
-    bestContact: 'Phone', bestTime: 'Morning', service: 'Furnace service',
-    notes: '',
+    bestContact: 'Phone', bestTime: 'Anytime', service: 'Furnace service', notes: '',
   });
-  const onSubmit = (e) => { e.preventDefault(); setSubmitted(true); };
+
+  const set = (k) => (e) => {
+    const val = e.target.value;
+    setForm((f) => ({ ...f, [k]: val }));
+    setErrors((er) => { if (!er[k]) return er; const n = { ...er }; delete n[k]; return n; });
+  };
+
+  const validate = () => {
+    const e = {};
+    if (!form.name.trim()) e.name = 'Please add your name.';
+    if (!form.phone.trim()) e.phone = 'A phone number helps us reach you fast.';
+    if (!form.email.trim()) e.email = 'Add an email so we can follow up.';
+    else if (form.email.indexOf('@') < 1 || form.email.indexOf('.') < 0) e.email = 'That email looks off — mind checking it?';
+    if (!form.address.trim()) e.address = 'Let us know where the work is needed.';
+    return e;
+  };
+
+  const onSubmit = async (e) => {
+    e.preventDefault();
+    const errs = validate();
+    if (Object.keys(errs).length) { setErrors(errs); return; }
+    setSending(true);
+    const notes = [
+      'Preferred contact: ' + form.bestContact,
+      'Preferred time: ' + form.bestTime,
+      form.notes.trim() ? 'Notes: ' + form.notes.trim() : null,
+    ].filter(Boolean).join(' · ');
+    try {
+      await submitLead({
+        name: form.name, phone: form.phone, email: form.email,
+        address: form.address, service: form.service, notes: notes, page: 'contact-form',
+      });
+    } catch (err) {}
+    setSending(false);
+    setSubmitted(true);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const firstName = form.name.trim() ? form.name.trim().split(' ')[0] : '';
 
   return (
     <React.Fragment>
       <section className="page-hero">
         <div className="wrap">
           <div className="crumbs">Home / <span>Contact</span></div>
-          <div style={{ display: 'grid', gridTemplateColumns: '1.3fr 1fr', gap: 40, alignItems: 'center' }}>
+          <div className="contact-hero-grid" style={{ display: 'grid', gridTemplateColumns: '1.3fr 1fr', gap: 40, alignItems: 'center' }}>
             <div>
               <div className="eyebrow"><Icon.Mail style={{ width: 14, height: 14 }}/> Get in touch</div>
               <h1 style={{ marginTop: 18 }}>Let's get your home <span className="word-warm">comfortable.</span></h1>
-              <p className="lede">
-                Book online below for instant scheduling — or send a request and we'll be in touch within one business day (usually within the hour during business hours).
-              </p>
+              <p className="lede">Send us a request below and we'll be in touch within one business day — usually within the hour during business hours. Tell us what's going on and we'll take it from there.</p>
             </div>
             <img src="assets/van.png" alt="OpticAir service van" style={{ width: '100%', height: 'auto', display: 'block' }}/>
           </div>
@@ -189,99 +231,119 @@ function ContactPage({ navigate }) {
       <section>
         <div className="wrap">
           <div className="contact-grid">
-            {/* Booking widget */}
-            <div>
-              <BookingWidget navigate={navigate}/>
-            </div>
-
-            {/* Form */}
             <div>
               {submitted ? (
-                <div className="contact-side" style={{ background: 'var(--c-card)', border: '1px solid var(--c-line)', textAlign: 'center', padding: '56px 32px' }}>
-                  <div style={{ width: 64, height: 64, borderRadius: '50%', background: 'color-mix(in oklab, var(--accent) 14%, var(--c-bg))', color: 'var(--accent)', display: 'grid', placeItems: 'center', margin: '0 auto 20px' }}>
-                    <Icon.Check style={{ width: 28, height: 28 }}/>
+                <div className="request-confirm">
+                  <div className="confirm-head">
+                    <div className="confirm-check"><Icon.Check style={{ width: 26, height: 26 }}/></div>
+                    <div>
+                      <h2 style={{ fontSize: 28 }}>Request received{firstName ? ', ' + firstName : ''}.</h2>
+                      <p style={{ marginTop: 8 }}>We've got your details for <strong>{form.service.toLowerCase()}</strong>. Here's exactly what happens next.</p>
+                    </div>
                   </div>
-                  <h2 style={{ fontSize: 28 }}>Request sent.</h2>
-                  <p style={{ marginTop: 14 }}>Thanks {form.name || 'there'} — we've got your details. Jared or a team member will be in touch by {form.bestContact.toLowerCase()} during the {form.bestTime.toLowerCase()}.</p>
-                  <button className="btn btn-ghost" style={{ marginTop: 24 }} onClick={() => setSubmitted(false)}>Send another request</button>
+                  <ol className="next-steps">
+                    <li><span className="ns-num">1</span><div><h4>Request received</h4><p>Your request just landed with our team — nothing more you need to do.</p></div></li>
+                    <li><span className="ns-num">2</span><div><h4>We reach out</h4><p>Jared or a team member contacts you by {form.bestContact.toLowerCase()} within one business day — usually within the hour during business hours{form.bestTime !== 'Anytime' ? ', aiming for the ' + form.bestTime.toLowerCase() : ''}.</p></div></li>
+                    <li><span className="ns-num">3</span><div><h4>We get you booked</h4><p>We confirm pricing, answer your questions, and schedule your visit or send your quote.</p></div></li>
+                  </ol>
+                  <div className="confirm-emergency"><strong>No heat or cooling right now?</strong> Don't wait on the form — our 24/7 line is at <a href={'tel:' + BIZ.phoneRaw}>{BIZ.phone}</a>.</div>
+                  <button type="button" className="btn btn-ghost" style={{ marginTop: 4 }} onClick={() => { setSubmitted(false); setErrors({}); setForm({ name: '', phone: '', email: '', address: '', bestContact: 'Phone', bestTime: 'Anytime', service: 'Furnace service', notes: '' }); }}>Send another request</button>
                 </div>
               ) : (
-                <form onSubmit={onSubmit} style={{ background: 'var(--c-card)', border: '1px solid var(--c-line)', borderRadius: 'var(--radius-lg)', padding: 32, boxShadow: 'var(--shadow-sm)' }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 22 }}>
-                    <h3 style={{ fontSize: 22 }}>Or send a request</h3>
-                    <span style={{ fontSize: 13, color: 'var(--c-ink-3)', fontWeight: 600 }}>We reply within 1 hour</span>
+                <form onSubmit={onSubmit} noValidate className="request-form">
+                  <div className="request-form-head">
+                    <h3 style={{ fontSize: 22 }}>Send us a request</h3>
+                    <span className="reply-badge"><span className="dot"/> Replies within 1 business hour</span>
                   </div>
                   <div className="form-grid">
-                    <div className="field">
-                      <label htmlFor="f-name">Full name</label>
-                      <input id="f-name" type="text" required value={form.name} onChange={(e)=>setForm({...form, name: e.target.value})} placeholder="Jane Doe"/>
+                    <div className={'field' + (errors.name ? ' has-error' : '')}>
+                      <label htmlFor="f-name">Full name <span className="req">*</span></label>
+                      <input id="f-name" type="text" value={form.name} onChange={set('name')} placeholder="Jane Doe" autoComplete="name"/>
+                      {errors.name ? <span className="err">{errors.name}</span> : <span className="hint">So we know who we're talking to.</span>}
+                    </div>
+                    <div className={'field' + (errors.phone ? ' has-error' : '')}>
+                      <label htmlFor="f-phone">Phone <span className="req">*</span></label>
+                      <input id="f-phone" type="tel" value={form.phone} onChange={set('phone')} placeholder="(613) 555-0123" autoComplete="tel"/>
+                      {errors.phone ? <span className="err">{errors.phone}</span> : <span className="hint">Best number to reach you.</span>}
+                    </div>
+                    <div className={'field full' + (errors.email ? ' has-error' : '')}>
+                      <label htmlFor="f-email">Email <span className="req">*</span></label>
+                      <input id="f-email" type="email" value={form.email} onChange={set('email')} placeholder="jane@example.com" autoComplete="email"/>
+                      {errors.email ? <span className="err">{errors.email}</span> : <span className="hint">We'll send confirmation and any quote here.</span>}
+                    </div>
+                    <div className={'field full' + (errors.address ? ' has-error' : '')}>
+                      <label htmlFor="f-addr">Service address <span className="req">*</span></label>
+                      <input id="f-addr" type="text" value={form.address} onChange={set('address')} placeholder="123 Main St, Ottawa ON" autoComplete="street-address"/>
+                      {errors.address ? <span className="err">{errors.address}</span> : <span className="hint">Where the work is needed — confirms we cover your area.</span>}
                     </div>
                     <div className="field">
-                      <label htmlFor="f-phone">Phone</label>
-                      <input id="f-phone" type="tel" required value={form.phone} onChange={(e)=>setForm({...form, phone: e.target.value})} placeholder="(613) 555-0123"/>
-                    </div>
-                    <div className="field full">
-                      <label htmlFor="f-email">Email</label>
-                      <input id="f-email" type="email" required value={form.email} onChange={(e)=>setForm({...form, email: e.target.value})} placeholder="jane@example.com"/>
-                    </div>
-                    <div className="field full">
-                      <label htmlFor="f-addr">Service address</label>
-                      <input id="f-addr" type="text" required value={form.address} onChange={(e)=>setForm({...form, address: e.target.value})} placeholder="123 Main St, Ottawa ON"/>
-                    </div>
-                    <div className="field">
-                      <label htmlFor="f-contact">Best way to contact</label>
-                      <select id="f-contact" value={form.bestContact} onChange={(e)=>setForm({...form, bestContact: e.target.value})}>
+                      <label htmlFor="f-contact">Best way to reach you</label>
+                      <select id="f-contact" value={form.bestContact} onChange={set('bestContact')}>
                         <option>Phone</option><option>Email</option><option>Text</option>
                       </select>
                     </div>
                     <div className="field">
-                      <label htmlFor="f-time">Best time</label>
-                      <select id="f-time" value={form.bestTime} onChange={(e)=>setForm({...form, bestTime: e.target.value})}>
-                        <option>Morning</option><option>Afternoon</option><option>Evening</option><option>Anytime</option>
+                      <label htmlFor="f-time">Best time of day</label>
+                      <select id="f-time" value={form.bestTime} onChange={set('bestTime')}>
+                        <option>Anytime</option><option>Morning</option><option>Afternoon</option><option>Evening</option>
                       </select>
                     </div>
                     <div className="field full">
-                      <label htmlFor="f-svc">What's this regarding?</label>
-                      <select id="f-svc" value={form.service} onChange={(e)=>setForm({...form, service: e.target.value})}>
-                        <option>Furnace service</option><option>Furnace repair (no heat)</option><option>New furnace quote</option>
-                        <option>AC service</option><option>AC repair</option><option>New AC / heat pump quote</option>
-                        <option>Service plan signup</option><option>Light commercial inquiry</option><option>Other</option>
+                      <label htmlFor="f-svc">What can we help with?</label>
+                      <select id="f-svc" value={form.service} onChange={set('service')}>
+                        {SERVICES.map((s) => <option key={s}>{s}</option>)}
                       </select>
+                      <span className="hint">Not sure? Pick the closest — we'll sort out the details.</span>
                     </div>
                     <div className="field full">
-                      <label htmlFor="f-notes">Notes (optional)</label>
-                      <textarea id="f-notes" value={form.notes} onChange={(e)=>setForm({...form, notes: e.target.value})} placeholder="Anything we should know — make/model, when it started, urgency..."/>
+                      <label htmlFor="f-notes">Anything else? <span className="opt">(optional)</span></label>
+                      <textarea id="f-notes" value={form.notes} onChange={set('notes')} placeholder="Make / model, when it started, urgency, error codes — anything that helps."/>
                     </div>
                   </div>
-                  <button type="submit" className="btn btn-primary" style={{ marginTop: 22, width: '100%', justifyContent: 'center' }}>
-                    Send request <Icon.Arrow className="arrow"/>
+                  <button type="submit" className="btn btn-primary" disabled={sending} style={{ marginTop: 22, width: '100%', justifyContent: 'center', opacity: sending ? 0.7 : 1 }}>
+                    {sending ? 'Sending…' : <React.Fragment>Send request <Icon.Arrow className="arrow"/></React.Fragment>}
                   </button>
-                  <p style={{ fontSize: 12, color: 'var(--c-ink-3)', marginTop: 14, textAlign: 'center' }}>Leads go directly to {BIZ.email} · No spam, ever.</p>
+                  <p className="request-fineprint">Goes straight to our team in Housecall Pro — no call centers, no spam, ever.</p>
                 </form>
               )}
             </div>
-          </div>
-        </div>
-      </section>
 
-      {/* Quick contact tiles */}
-      <section style={{ paddingTop: 0 }}>
-        <div className="wrap">
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 18 }}>
-            {[
-              { i: <Icon.Phone/>, l: 'Call', v: BIZ.phone, h: `tel:${BIZ.phoneRaw}` },
-              { i: <Icon.Mail/>, l: 'Email', v: BIZ.email, h: `mailto:${BIZ.email}` },
-              { i: <Icon.Pin/>, l: 'Visit', v: BIZ.address, h: '#' },
-              { i: <Icon.Clock/>, l: 'Hours', v: 'Mon–Fri 8am–5pm · 24/7 emergency line', h: '#' },
-            ].map((c, i) => (
-              <a key={i} href={c.h} style={{ padding: 24, background: 'var(--c-bg-2)', borderRadius: 'var(--radius-lg)', display: 'flex', flexDirection: 'column', gap: 12 }}>
-                <div style={{ width: 40, height: 40, borderRadius: 10, background: 'var(--c-card)', border: '1px solid var(--c-line)', display: 'grid', placeItems: 'center', color: 'var(--accent)' }}>{c.i}</div>
-                <div>
-                  <div style={{ fontSize: 12, color: 'var(--c-ink-3)', textTransform: 'uppercase', letterSpacing: '.08em', fontWeight: 700 }}>{c.l}</div>
-                  <div style={{ fontSize: 15, color: 'var(--c-ink)', fontWeight: 600, marginTop: 4 }}>{c.v}</div>
+            <aside className="contact-side">
+              <div>
+                <div className="eyebrow" style={{ color: 'var(--accent)' }}>Prefer to talk now?</div>
+                <div className="side-info">
+                  <a className="info-row" href={'tel:' + BIZ.phoneRaw}>
+                    <span className="icon-bubble"><Icon.Phone/></span>
+                    <span><span className="l">Call</span><span className="v">{BIZ.phone}</span></span>
+                  </a>
+                  <a className="info-row" href={'mailto:' + BIZ.email}>
+                    <span className="icon-bubble"><Icon.Mail/></span>
+                    <span><span className="l">Email</span><span className="v">{BIZ.email}</span></span>
+                  </a>
+                  <div className="info-row">
+                    <span className="icon-bubble"><Icon.Clock/></span>
+                    <span><span className="l">Hours</span><span className="v">Mon–Sun 8am–5pm · 24/7 emergency</span></span>
+                  </div>
+                  <div className="info-row">
+                    <span className="icon-bubble"><Icon.Pin/></span>
+                    <span><span className="l">Based in</span><span className="v">{BIZ.address}</span></span>
+                  </div>
                 </div>
-              </a>
-            ))}
+              </div>
+              <div className="side-trust">
+                <div className="side-trust-title">Why homeowners call us</div>
+                <ul>
+                  <li><Icon.Check/> Licensed &amp; insured · TSSA registered</li>
+                  <li><Icon.Check/> Locally owned in Richmond, ON</li>
+                  <li><Icon.Check/> Up-front pricing — no surprises</li>
+                  <li><Icon.Check/> Reply within 1 business hour</li>
+                </ul>
+              </div>
+              <div className="side-emergency">
+                <Icon.Bolt/>
+                <div><strong>No heat or AC?</strong> Our 24/7 emergency line is always answered — <a href={'tel:' + BIZ.phoneRaw}>call {BIZ.phone}</a>.</div>
+              </div>
+            </aside>
           </div>
         </div>
       </section>
@@ -309,134 +371,4 @@ function ContactPage({ navigate }) {
   );
 }
 
-// ── Booking Widget ────────────────────────────────────────────────────────
-function BookingWidget({ navigate }) {
-  const [step, setStep] = React.useState(1);
-  const [svc, setSvc] = React.useState('furnace-service');
-  const [day, setDay] = React.useState(null);
-  const [time, setTime] = React.useState(null);
-
-  const services = [
-    { id: 'furnace-service', t: 'Furnace tune-up', d: '60 min · from $130 + HST' },
-    { id: 'furnace-repair', t: 'Furnace repair', d: 'Diagnostic from $110 + HST' },
-    { id: 'ac-service', t: 'AC tune-up', d: '60 min · from $130 + HST' },
-    { id: 'ac-repair', t: 'AC repair', d: 'Diagnosis + estimate' },
-    { id: 'new-quote', t: 'New system quote', d: 'Free in-home assessment' },
-    { id: 'other', t: 'Something else', d: 'Tell us what\'s up' },
-  ];
-
-  // Mock calendar — current month, mark today + skip Sundays / past days
-  const today = new Date();
-  const year = today.getFullYear();
-  const month = today.getMonth();
-  const firstDay = new Date(year, month, 1).getDay();
-  const daysInMonth = new Date(year, month + 1, 0).getDate();
-  const monthName = today.toLocaleString('en', { month: 'long' });
-
-  const cells = [];
-  for (let i = 0; i < firstDay; i++) cells.push(null);
-  for (let d = 1; d <= daysInMonth; d++) cells.push(d);
-
-  const times = ['8:00 AM', '10:00 AM', '12:00 PM', '2:00 PM', '4:00 PM', '6:00 PM'];
-
-  return (
-    <div className="booking">
-      <div className="booking-head">
-        <h3>Book online — {step === 1 ? 'choose a service' : step === 2 ? 'pick a time' : 'confirm'}</h3>
-        <div className="step">Step {step} of 3</div>
-      </div>
-
-      {step === 1 && (
-        <React.Fragment>
-          <div className="svc-picks">
-            {services.map(s => (
-              <button key={s.id} type="button" className="svc-pick" aria-pressed={svc === s.id} onClick={() => setSvc(s.id)}>
-                <div className="t">{s.t}</div>
-                <div className="d">{s.d}</div>
-              </button>
-            ))}
-          </div>
-          <button className="btn btn-primary" style={{ marginTop: 22, width: '100%', justifyContent: 'center' }} onClick={() => setStep(2)}>
-            Continue <Icon.Arrow className="arrow"/>
-          </button>
-        </React.Fragment>
-      )}
-
-      {step === 2 && (
-        <React.Fragment>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
-            <strong style={{ fontSize: 15 }}>{monthName} {year}</strong>
-            <div style={{ fontSize: 13, color: 'var(--c-ink-3)' }}>Times in ET</div>
-          </div>
-          <div className="cal-grid">
-            {['S','M','T','W','T','F','S'].map((d, i) => <div key={i} className="cal-dow">{d}</div>)}
-            {cells.map((d, i) => {
-              if (d === null) return <div key={i} className="cal-cell" disabled/>;
-              const date = new Date(year, month, d);
-              const isPast = date < new Date(today.toDateString());
-              const isSun = date.getDay() === 0;
-              const disabled = isPast || isSun;
-              const isToday = d === today.getDate();
-              return (
-                <button key={i} type="button" className={`cal-cell ${isToday ? 'today' : ''}`}
-                        disabled={disabled} aria-pressed={day === d}
-                        onClick={() => !disabled && setDay(d)}>
-                  {d}
-                </button>
-              );
-            })}
-          </div>
-          {day && (
-            <React.Fragment>
-              <div style={{ marginTop: 22, fontSize: 14, fontWeight: 600 }}>Available times for {monthName} {day}</div>
-              <div className="time-grid">
-                {times.map(t => (
-                  <button key={t} type="button" className="time-pick" aria-pressed={time === t} onClick={() => setTime(t)}>
-                    {t}
-                  </button>
-                ))}
-              </div>
-            </React.Fragment>
-          )}
-          <div style={{ display: 'flex', gap: 8, marginTop: 22 }}>
-            <button className="btn btn-ghost" onClick={() => setStep(1)}>Back</button>
-            <button className="btn btn-primary" style={{ flex: 1, justifyContent: 'center', opacity: (day && time) ? 1 : .5, pointerEvents: (day && time) ? 'auto' : 'none' }}
-                    onClick={() => setStep(3)}>
-              Continue <Icon.Arrow className="arrow"/>
-            </button>
-          </div>
-        </React.Fragment>
-      )}
-
-      {step === 3 && (
-        <React.Fragment>
-          <div style={{ background: 'var(--c-bg-2)', borderRadius: 12, padding: 18, marginBottom: 18 }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 12 }}>
-              <div>
-                <div style={{ fontSize: 12, color: 'var(--c-ink-3)', fontWeight: 700, letterSpacing: '.08em', textTransform: 'uppercase' }}>Your booking</div>
-                <div style={{ fontSize: 18, fontWeight: 700, marginTop: 6 }}>{services.find(s => s.id === svc)?.t}</div>
-                <div style={{ fontSize: 14, color: 'var(--c-ink-2)', marginTop: 4 }}>{monthName} {day}, {year} · {time}</div>
-              </div>
-              <button onClick={() => setStep(1)} style={{ fontSize: 12, color: 'var(--accent)', background: 'none', border: 0, fontWeight: 700, cursor: 'pointer' }}>Edit</button>
-            </div>
-          </div>
-          <div className="form-grid">
-            <div className="field"><label>First name</label><input type="text" placeholder="Jane"/></div>
-            <div className="field"><label>Last name</label><input type="text" placeholder="Doe"/></div>
-            <div className="field full"><label>Phone</label><input type="tel" placeholder="(613) 555-0123"/></div>
-            <div className="field full"><label>Service address</label><input type="text" placeholder="123 Main St, Ottawa ON"/></div>
-          </div>
-          <button className="btn btn-primary" style={{ marginTop: 22, width: '100%', justifyContent: 'center' }}
-                  onClick={() => alert('Mock booking confirmed — in production this would email leads to ' + BIZ.email)}>
-            Confirm booking <Icon.Calendar/>
-          </button>
-          <p style={{ fontSize: 12, color: 'var(--c-ink-3)', marginTop: 12, textAlign: 'center' }}>
-            You'll receive a text confirmation. We'll call if anything changes.
-          </p>
-        </React.Fragment>
-      )}
-    </div>
-  );
-}
-
-Object.assign(window, { ContactPage, BookingWidget });
+Object.assign(window, { ContactPage });
