@@ -1,12 +1,13 @@
 // OpticAir — receives website form submissions and creates a Lead in Housecall Pro.
-// redeploy: lead source fix 1781534621427
 // Requires the Vercel env var HCP_API_KEY (Housecall Pro MAX plan API key).
 // Until that key is set, it responds gracefully so the form still works (lead is just not delivered).
 module.exports = async function handler(req, res) {
+  // CORS — the form is served from opticair.ca (GoDaddy) and posts cross-origin to this Vercel function.
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-  if (req.method === 'OPTIONS') { return res.status(204).end(); }
+  if (req.method === 'OPTIONS') return res.status(204).end();
+
   if (req.method !== 'POST') {
     return res.status(405).json({ ok: false, error: 'Method not allowed' });
   }
@@ -19,6 +20,8 @@ module.exports = async function handler(req, res) {
   const name = get('name'), phone = get('phone'), email = get('email');
   const address = get('address'), city = get('city'), service = get('service');
   const urgency = get('urgency'), notes = get('notes'), page = get('page');
+  const state = get('state') || get('province') || 'ON';
+  const zip = get('zip') || get('postal') || get('postalCode') || get('postal_code');
 
   if (!name && !phone && !email) {
     return res.status(400).json({ ok: false, error: 'Missing contact details' });
@@ -31,7 +34,8 @@ module.exports = async function handler(req, res) {
   const lines = [];
   if (service) lines.push('Service requested: ' + service);
   if (urgency) lines.push('Timing: ' + urgency);
-  if (city) lines.push('City/area: ' + city);
+  if (address) lines.push('Service address: ' + address + (city ? ', ' + city : ''));
+  else if (city) lines.push('City/area: ' + city);
   if (notes) lines.push('Notes: ' + notes);
   lines.push('Submitted via OpticAir website' + (page ? ' (' + page + ')' : ''));
   const note = lines.join('\n');
@@ -42,19 +46,26 @@ module.exports = async function handler(req, res) {
     return res.status(200).json({ ok: true, delivered: false });
   }
 
-  const customer = { first_name, notifications_enabled: false };
+  // Build a structured service address. Province defaults to Ontario (ON) for the Ottawa service area.
+  let addr = null;
+  if (address || city) {
+    addr = {};
+    if (address) addr.street = address;
+    if (city) addr.city = city;
+    if (state) addr.state = state;
+    if (zip) addr.zip = zip;
+  }
+
+  const customer = { first_name, notifications_enabled: false, lead_source: 'Website' };
   if (last_name) customer.last_name = last_name;
   if (email) customer.email = email;
   if (phone) customer.mobile_number = phone;
+  // Attach the address to the customer record so it carries over to the job (no manual entry needed).
+  if (addr) customer.addresses = [addr];
 
-  const payload = { customer, note };
-  const leadSource = process.env.HCP_LEAD_SOURCE;
-  if (leadSource) payload.lead_source = leadSource;
-  if (address || city) {
-    payload.address = {};
-    if (address) payload.address.street = address;
-    if (city) payload.address.city = city;
-  }
+  const payload = { customer, lead_source: 'OpticAir Website', note };
+  // Also set the lead's top-level address.
+  if (addr) payload.address = addr;
 
   try {
     const r = await fetch('https://api.housecallpro.com/leads', {
