@@ -20,7 +20,7 @@ function HomePage({ navigate, t }) {
                 Expert HVAC solutions in Ottawa. Heating, air conditioning and ventilation — maintained, repaired and installed by a locally-owned team with 15+ years of experience.
               </p>
               <div className="ctas">
-                <a className="btn btn-primary" href="#contact" onClick={(e) => { e.preventDefault(); navigate('contact'); }}>
+                <a className="btn btn-primary" href="/contact" onClick={(e) => { e.preventDefault(); navigate('contact'); }}>
                   Book online <Icon.Arrow className="arrow" />
                 </a>
                 <a className="btn btn-ghost" href={`tel:${BIZ.phoneRaw}`}>
@@ -72,7 +72,7 @@ function HomePage({ navigate, t }) {
                 <li>Tankless water heaters</li>
               </ul>
               <div className="card-foot">
-                <a className="linklike" href="#heating" onClick={(e) => { e.preventDefault(); navigate('heating'); }}>
+                <a className="linklike" href="/heating" onClick={(e) => { e.preventDefault(); navigate('heating'); }}>
                   See heating services <Icon.Arrow />
                 </a>
               </div>
@@ -89,7 +89,7 @@ function HomePage({ navigate, t }) {
                 <li>Ductless mini-splits</li>
               </ul>
               <div className="card-foot">
-                <a className="linklike" href="#cooling" onClick={(e) => { e.preventDefault(); navigate('cooling'); }}>
+                <a className="linklike" href="/cooling" onClick={(e) => { e.preventDefault(); navigate('cooling'); }}>
                   See AC services <Icon.Arrow />
                 </a>
               </div>
@@ -106,7 +106,7 @@ function HomePage({ navigate, t }) {
                 <li>ERV service & install</li>
               </ul>
               <div className="card-foot">
-                <a className="linklike" href="#contact" onClick={(e) => { e.preventDefault(); navigate('contact'); }}>
+                <a className="linklike" href="/contact" onClick={(e) => { e.preventDefault(); navigate('contact'); }}>
                   Ask about a system <Icon.Arrow />
                 </a>
               </div>
@@ -134,8 +134,8 @@ function HomePage({ navigate, t }) {
                 <li><Icon.Check /> 24/7 emergency service</li>
               </ul>
               <div style={{ marginTop: 32, display: 'flex', gap: 12, flexWrap: 'wrap' }}>
-                <a className="btn btn-dark" href="#plans" onClick={(e) => { e.preventDefault(); navigate('plans'); }}>See service plans <Icon.Arrow className="arrow" /></a>
-                <a className="linklike" href="#contact" onClick={(e) => { e.preventDefault(); navigate('contact'); }}>Get a free quote <Icon.Arrow /></a>
+                <a className="btn btn-dark" href="/plans" onClick={(e) => { e.preventDefault(); navigate('plans'); }}>See service plans <Icon.Arrow className="arrow" /></a>
+                <a className="linklike" href="/contact" onClick={(e) => { e.preventDefault(); navigate('contact'); }}>Get a free quote <Icon.Arrow /></a>
               </div>
             </div>
             <Photo scene="team" aspect="4-5" src="assets/team-van.jpg" alt="Optic Air owner standing beside the company service van" />
@@ -186,7 +186,7 @@ function HomePage({ navigate, t }) {
           />
           <PlansBlock navigate={navigate} />
           <div style={{ textAlign: 'center', marginTop: 32 }}>
-            <a className="linklike" href="#plans" onClick={(e) => { e.preventDefault(); navigate('plans'); }}>
+            <a className="linklike" href="/plans" onClick={(e) => { e.preventDefault(); navigate('plans'); }}>
               Compare all plan benefits <Icon.Arrow />
             </a>
           </div>
@@ -291,7 +291,7 @@ function PlansBlock({ navigate, onChoosePlan }) {
           <div className="plan-cta">
             <a className={p.featured ? 'btn btn-primary' : 'btn btn-dark'}
                style={{ width: '100%', justifyContent: 'center' }}
-               href={onChoosePlan ? '#plan-form' : '#contact'} onClick={(e) => { e.preventDefault(); if (onChoosePlan) { onChoosePlan(p.name); } else { navigate && navigate('contact'); } }}>
+               href={onChoosePlan ? '#plan-form' : '/contact'} onClick={(e) => { e.preventDefault(); if (onChoosePlan) { onChoosePlan(p.name); } else { navigate && navigate('contact'); } }}>
               {p.cta} <Icon.Arrow className="arrow" />
             </a>
           </div>
@@ -302,50 +302,28 @@ function PlansBlock({ navigate, onChoosePlan }) {
 }
 
 // ── Reviews ──────────────────────────────────────────────────────────────
+const REVIEW_COLORS = ['#E15A4A', '#2A6FDB', '#1F8A5B', '#7C3AED', '#D97706', '#0EA5B7', '#BE185D', '#475569'];
+
+// Real reviews from Optic Air's Google Business Profile (used as a fallback;
+// the live Google feed below refreshes these automatically when available).
 const REVIEWS = [
   {
-    body: "Booked online Sunday night, Jared was at our place Monday morning. Diagnosed a failing inducer motor, gave us a fair quote, and had it replaced same-day. House was warm by lunchtime. Can't recommend these guys enough.",
-    name: "Sarah Mitchell", place: "Barrhaven, ON", initials: "S",
-    rating: 5, when: "2 weeks ago", color: "#E15A4A", category: "Furnace repair",
+    body: "Jared came on time and performed what he promised to do on my PVAC unit. He was very professional and thorough in his maintenance and answered all my questions. He made sure my unit was cleaned and reassembled and running properly before leaving. I highly recommend his services.",
+    name: "Douglas Tam", initials: "D", rating: 5, when: "2 weeks ago", color: "#2A6FDB",
   },
   {
-    body: "Replaced our 22-year-old furnace and added an AC. Zero pressure, gave us three real options at different price points. Installation crew was respectful of our floors and kids. Highly recommend.",
-    name: "Daniel Reilly", place: "Kanata, ON", initials: "D",
-    rating: 5, when: "1 month ago", color: "#2A6FDB", category: "New install",
+    body: "I had a great experience with Optic Air. Jared was great to communicate with, set us up with a great technician (Shaun) quickly and fixed our furnace. Would definitely recommend using them in the future.",
+    name: "Geordie Price", initials: "G", rating: 5, when: "4 months ago", color: "#1F8A5B",
   },
   {
-    body: "Signed up for the Priority plan and it's already paid for itself. Tune-up caught a cracked heat exchanger we'd have never seen. Quoted us honestly and got us scheduled fast.",
-    name: "Megan Tremblay", place: "Stittsville, ON", initials: "M",
-    rating: 5, when: "1 month ago", color: "#1F8A5B", category: "Maintenance plan",
-  },
-  {
-    body: "Property manager here — we use Optic Air for service contracts on three of our buildings. Communication is what sets them apart. Tickets close fast and we always know status.",
-    name: "Alex Pereira", place: "Ottawa, ON", initials: "A",
-    rating: 5, when: "2 months ago", color: "#7C3AED", category: "Commercial",
-  },
-  {
-    body: "Called on a Friday afternoon when the AC died during the heat wave. Jared rearranged his schedule and got us cool air the same evening. Fair price, no after-hours nonsense.",
-    name: "Hannah Boucher", place: "Manotick, ON", initials: "H",
-    rating: 5, when: "3 months ago", color: "#D97706", category: "AC repair",
-  },
-  {
-    body: "Got three quotes for a heat pump install. Optic Air wasn't the cheapest, wasn't the most expensive — but they were the only ones who actually walked through the house and asked about how we use each room. Install was clean.",
-    name: "Mark Desjardins", place: "Nepean, ON", initials: "M",
-    rating: 5, when: "3 months ago", color: "#0EA5B7", category: "Heat pump",
-  },
-  {
-    body: "Honest is the word. Old company quoted us $4,800 for repairs on our furnace and said we should just replace it. Jared looked at it, replaced one part for $340, and it's been running fine for 8 months.",
-    name: "Priya Sharma", place: "Orleans, ON", initials: "P",
-    rating: 5, when: "4 months ago", color: "#BE185D", category: "Furnace repair",
-  },
-  {
-    body: "Took half a star off only because scheduling was tight the week we called — they were honest about it and got us in the next day instead. Service itself was excellent.",
-    name: "Tom Reilly", place: "Carleton Place, ON", initials: "T",
-    rating: 5, when: "5 months ago", color: "#475569", category: "Tune-up",
+    body: "Some technicians love to do research, to plan in advance, to anticipate potential problems. A careful analysis of the job (at the bidding stage) reduces material waste and minimizes the loss of time and labor when the job is underway.",
+    name: "David Findlay", initials: "D", rating: 5, when: "3 weeks ago", color: "#E15A4A",
   },
 ];
 
-const RATING = { avg: 5.0, total: 127 };
+const RATING = { avg: 5.0, total: 75 };
+const REVIEWS_URL = "https://www.google.com/maps/place/Optic+Air+-+Ottawa+HVAC+Contractor/@45.1988444,-75.8327155,17z";
+const REVIEWS_API = "https://optic-air-website.vercel.app/api/reviews";
 
 function Stars({ rating = 5, size = 14 }) {
   return (
@@ -371,6 +349,24 @@ function GoogleG({ size = 22 }) {
 function GoogleReviewsFeed() {
   const railRef = React.useRef(null);
   const [paused, setPaused] = React.useState(false);
+  const [live, setLive] = React.useState(null);
+
+  // Pull the live Google feed; silently fall back to the bundled real reviews.
+  React.useEffect(() => {
+    let alive = true;
+    fetch(REVIEWS_API)
+      .then((r) => r.json())
+      .then((d) => {
+        if (!alive || !d || !d.ok || !Array.isArray(d.reviews) || d.reviews.length === 0) return;
+        setLive(d);
+      })
+      .catch(() => {});
+    return () => { alive = false; };
+  }, []);
+
+  const reviews = (live && live.reviews && live.reviews.length) ? live.reviews : REVIEWS;
+  const rating = (live && live.rating && live.rating.avg) ? live.rating : RATING;
+  const reviewsUrl = (live && live.url) ? live.url : REVIEWS_URL;
 
   React.useEffect(() => {
     const rail = railRef.current;
@@ -393,10 +389,10 @@ function GoogleReviewsFeed() {
     };
     raf = requestAnimationFrame((t) => { last = t; tick(t); });
     return () => cancelAnimationFrame(raf);
-  }, [paused]);
+  }, [paused, reviews]);
 
   // Duplicate the list so the loop feels continuous
-  const cards = [...REVIEWS, ...REVIEWS];
+  const cards = [...reviews, ...reviews];
 
   return (
     <div className="gfeed">
@@ -408,15 +404,15 @@ function GoogleReviewsFeed() {
         </div>
 
         <div className="gfeed-score">
-          <div className="gfeed-avg">{RATING.avg.toFixed(1)}</div>
+          <div className="gfeed-avg">{Number(rating.avg).toFixed(1)}</div>
           <Stars rating={5} size={22} />
         </div>
 
         <p className="gfeed-desc">
-          Based on <strong>{RATING.total} verified Google reviews</strong> from homeowners and property managers across the Ottawa area. Every review is from a real customer we've worked with.
+          Based on <strong>{rating.total} verified Google reviews</strong> from homeowners and property managers across the Ottawa area. Every review is from a real customer we've worked with.
         </p>
 
-        <a className="gfeed-readall" href="https://www.google.com/maps" target="_blank" rel="noopener noreferrer">
+        <a className="gfeed-readall" href={reviewsUrl} target="_blank" rel="noopener noreferrer">
           Read all reviews on Google <span aria-hidden="true">↗</span>
         </a>
       </aside>
@@ -441,13 +437,12 @@ function GReviewCard({ r }) {
     <article className="greview">
       <div className="greview-gbadge" title="Posted on Google"><GoogleG size={22} /></div>
       <header className="greview-head">
-        <div className="greview-avatar" style={{ background: r.color }}>{r.initials}</div>
+        <div className="greview-avatar" style={{ background: r.color || '#475569' }}>{r.initials}</div>
         <div className="greview-id">
           <div className="greview-name">{r.name}</div>
           <div className="greview-sub">
             <span>{r.when}</span>
-            <span className="dot-sep">·</span>
-            <span>{r.category}</span>
+            {r.category ? <React.Fragment><span className="dot-sep">·</span><span>{r.category}</span></React.Fragment> : null}
           </div>
         </div>
       </header>
@@ -457,7 +452,7 @@ function GReviewCard({ r }) {
       <p className="greview-body">{r.body}</p>
       <footer className="greview-foot">
         <span className="greview-source">Posted on Google</span>
-        <span className="greview-place">{r.place}</span>
+        {r.place ? <span className="greview-place">{r.place}</span> : null}
       </footer>
     </article>
   );
@@ -466,12 +461,12 @@ function GReviewCard({ r }) {
 // ── Hero Lead Card ───────────────────────────────────────────────────────
 function HeroLeadCard({ navigate }) {
   const [sent, setSent] = React.useState(false);
-  const [f, setF] = React.useState({ name: '', phone: '', city: '', service: 'Furnace service', urgency: 'ASAP (no heat/cool)' });
+  const [f, setF] = React.useState({ name: '', phone: '', address: '', city: '', service: 'Furnace service', urgency: 'ASAP (no heat/cool)' });
   const [sending, setSending] = React.useState(false);
   const submit = async (e) => {
     e.preventDefault();
     setSending(true);
-    try { await submitLead({ name: f.name, phone: f.phone, city: f.city, service: f.service, urgency: f.urgency, page: 'home-hero' }); } catch (err) {}
+    try { await submitLead({ name: f.name, phone: f.phone, address: f.address, city: f.city, service: f.service, urgency: f.urgency, page: 'home-hero' }); } catch (err) {}
     setSending(false);
     setSent(true);
   };
@@ -507,6 +502,10 @@ function HeroLeadCard({ navigate }) {
         <div className="field">
           <input type="tel" required placeholder="Phone number" value={f.phone}
                  onChange={(e)=>setF({...f, phone: e.target.value})}/>
+        </div>
+        <div className="field">
+          <input type="text" required placeholder="Street address" autoComplete="street-address" value={f.address}
+                 onChange={(e)=>setF({...f, address: e.target.value})}/>
         </div>
         <div className="field">
           <select required value={f.city} onChange={(e)=>setF({...f, city: e.target.value})}>
