@@ -8,6 +8,14 @@ const NAV_ITEMS = [
   { id: 'contact', label: 'Contact' },
 ];
 
+// Path-based routing helpers (real URLs for SEO)
+const pathForPage = (id) => (id === 'home' ? '/' : '/' + id);
+const pageForPath = (p) => {
+  const seg = (p || '/').replace(/^\/+|\/+$/g, '').toLowerCase();
+  if (!seg) return 'home';
+  return NAV_ITEMS.find((n) => n.id === seg) ? seg : 'home';
+};
+
 const BIZ = {
   phone: '(613) 297-5377',
   phoneRaw: '6132975377',
@@ -116,7 +124,7 @@ function Header({ page, navigate }) {
   return (
     <header className={"site-header" + (menuOpen ? " menu-open" : "")}>
       <div className="wrap">
-        <a href="#home" className="logo" onClick={(e) => { e.preventDefault(); go('home'); }}>
+        <a href="/" className="logo" onClick={(e) => { e.preventDefault(); go('home'); }}>
           <img src="assets/logo.png" alt="Optic Air" />
         </a>
         <button
@@ -133,7 +141,7 @@ function Header({ page, navigate }) {
         <div className="header-menu">
           <nav className="nav">
             {NAV_ITEMS.map((it) => (
-              <a key={it.id} href={`#${it.id}`}
+              <a key={it.id} href={pathForPage(it.id)}
                  className={page === it.id ? 'active' : ''}
                  onClick={(e) => { e.preventDefault(); go(it.id); }}>
                 {it.label}
@@ -144,7 +152,7 @@ function Header({ page, navigate }) {
             <a className="header-phone" href={`tel:${BIZ.phoneRaw}`}>
               <Icon.Phone /> {BIZ.phone}
             </a>
-            <a className="btn btn-primary" href="#contact"
+            <a className="btn btn-primary" href="/contact"
                onClick={(e) => { e.preventDefault(); go('contact'); }}>
               Book online <Icon.Arrow className="arrow" />
             </a>
@@ -169,7 +177,7 @@ function Footer({ navigate }) {
             <h5>Pages</h5>
             <ul>
               {NAV_ITEMS.map((it) => (
-                <li key={it.id}><a href={`#${it.id}`} onClick={(e) => { e.preventDefault(); navigate(it.id); }}>{it.label}</a></li>
+                <li key={it.id}><a href={pathForPage(it.id)} onClick={(e) => { e.preventDefault(); navigate(it.id); }}>{it.label}</a></li>
               ))}
             </ul>
           </div>
@@ -407,7 +415,7 @@ function CTABanner({ navigate, title = "Comfort that's one call away.", body = "
             <p style={{ marginTop: 18 }}>{body}</p>
           </div>
           <div className="ctas" style={{ position: 'relative' }}>
-            <a className="btn btn-primary" href="#contact" onClick={(e) => { e.preventDefault(); navigate('contact'); }}>{primary} <Icon.Arrow className="arrow"/></a>
+            <a className="btn btn-primary" href="/contact" onClick={(e) => { e.preventDefault(); navigate('contact'); }}>{primary} <Icon.Arrow className="arrow"/></a>
             <a className="btn btn-ghost" href={`tel:${BIZ.phoneRaw}`} style={{ borderColor: 'rgba(255,255,255,.25)', color: '#fff' }}><Icon.Phone /> {BIZ.phone.replace('(613) ', '')}</a>
           </div>
         </div>
@@ -420,7 +428,7 @@ function CTABanner({ navigate, title = "Comfort that's one call away.", body = "
 // Sends a website lead to the serverless function, which creates a Housecall Pro lead.
 async function submitLead(data) {
   try {
-    const res = await fetch('/api/create-lead', {
+    const res = await fetch('https://optic-air-website.vercel.app/api/create-lead', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data),
@@ -533,4 +541,4 @@ function LeadForm({ eyebrow = "Quick request", title = "Get a fast, honest quote
   );
 }
 
-Object.assign(window, { NAV_ITEMS, BIZ, Icon, Header, Footer, Photo, PhotoScene, SectionHead, TrustBar, CTABanner, LeadForm, submitLead });
+Object.assign(window, { NAV_ITEMS, BIZ, Icon, Header, Footer, Photo, PhotoScene, SectionHead, TrustBar, CTABanner, LeadForm, submitLead, pathForPage, pageForPath });
