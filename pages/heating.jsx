@@ -16,7 +16,7 @@ function HeatingPage({ navigate }) {
                 Furnaces, boilers, heat pumps, tankless water heaters and unit heaters — we maintain, repair, replace and install them. Honest diagnosis, fair pricing, no upsells.
               </p>
               <div style={{ display: 'flex', gap: 12, marginTop: 28, flexWrap: 'wrap' }}>
-                <a className="btn btn-primary" href="#contact" onClick={(e)=>{e.preventDefault();navigate('contact');}}>Book a tune-up <Icon.Arrow className="arrow"/></a>
+                <a className="btn btn-primary" href="/contact" onClick={(e)=>{e.preventDefault();navigate('contact');}}>Book a tune-up <Icon.Arrow className="arrow"/></a>
                 <a className="btn btn-ghost" href={`tel:${BIZ.phoneRaw}`}><Icon.Phone/> {BIZ.phone}</a>
               </div>
             </div>
@@ -85,7 +85,7 @@ function HeatingPage({ navigate }) {
                 <ul>{s.list.map((l,j) => <li key={j}>{l}</li>)}</ul>
                 <div className="card-foot" style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 14 }}>
                   {s.price && <span className="price">{s.price}</span>}
-                  <a className="btn btn-primary" href="#contact" onClick={(e)=>{e.preventDefault();navigate('contact');}} style={{ width: '100%', justifyContent: 'center' }}>Book Service Now <Icon.Arrow className="arrow"/></a>
+                  <a className="btn btn-primary" href="/contact" onClick={(e)=>{e.preventDefault();navigate('contact');}} style={{ width: '100%', justifyContent: 'center' }}>Book Service Now <Icon.Arrow className="arrow"/></a>
                 </div>
               </article>
             ))}
