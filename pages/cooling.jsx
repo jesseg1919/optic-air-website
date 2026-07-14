@@ -19,7 +19,7 @@ function CoolingPage({ navigate }) {
                 Central AC and ductless splits — kept quiet, efficient and reliable through every July heatwave. Spring tune-ups, mid-summer repairs, and full system replacements.
               </p>
               <div style={{ display: 'flex', gap: 12, marginTop: 28, flexWrap: 'wrap' }}>
-                <a className="btn btn-primary" href="#contact" onClick={(e)=>{e.preventDefault();navigate('contact');}}>Book a tune-up <Icon.Arrow className="arrow"/></a>
+                <a className="btn btn-primary" href="/contact" onClick={(e)=>{e.preventDefault();navigate('contact');}}>Book a tune-up <Icon.Arrow className="arrow"/></a>
                 <a className="btn btn-ghost" href={`tel:${BIZ.phoneRaw}`}><Icon.Phone/> {BIZ.phone}</a>
               </div>
             </div>
@@ -84,7 +84,7 @@ function CoolingPage({ navigate }) {
                 <ul>{s.list.map((l,j) => <li key={j}>{l}</li>)}</ul>
                 <div className="card-foot" style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 14 }}>
                   {s.price && <span className="price">{s.price}</span>}
-                  <a className="btn btn-primary" href="#contact" onClick={(e)=>{e.preventDefault();navigate('contact');}} style={{ width: '100%', justifyContent: 'center' }}>Book Service Now <Icon.Arrow className="arrow"/></a>
+                  <a className="btn btn-primary" href="/contact" onClick={(e)=>{e.preventDefault();navigate('contact');}} style={{ width: '100%', justifyContent: 'center' }}>Book Service Now <Icon.Arrow className="arrow"/></a>
                 </div>
               </article>
             ))}
@@ -109,7 +109,7 @@ function CoolingPage({ navigate }) {
                 <li><Icon.Check/> Pairs with existing furnace</li>
               </ul>
               <div style={{ marginTop: 28 }}>
-                <a className="btn btn-dark" href="#contact" onClick={(e)=>{e.preventDefault();navigate('contact');}}>Get a heat-pump quote <Icon.Arrow className="arrow"/></a>
+                <a className="btn btn-dark" href="/contact" onClick={(e)=>{e.preventDefault();navigate('contact');}}>Get a heat-pump quote <Icon.Arrow className="arrow"/></a>
               </div>
             </div>
           </div>
