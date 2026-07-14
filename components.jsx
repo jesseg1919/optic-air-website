@@ -425,6 +425,13 @@ async function submitLead(data) {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data),
     });
+    if (res.ok && window.gtag) {
+      window.gtag('event', 'conversion', {
+        'send_to': 'AW-16693139414/coP1CI_jnc4cENav9Jc-',
+        'value': 1.0,
+        'currency': 'CAD',
+      });
+    }
     return res.ok;
   } catch (e) {
     return false;
