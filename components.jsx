@@ -424,15 +424,36 @@ function CTABanner({ navigate, title = "Comfort that's one call away.", body = "
 }
 
 // ── Lead form (bottom-of-page) ───────────────────────────────────────────
+// GA4 is not installed yet. After adding a GA4 tag to index.html (gtag('config', 'G-…')),
+// put the same measurement ID here to also send a GA4 generate_lead event with attribution.
+const GA4_MEASUREMENT_ID = '';
+
+// First/last-touch marketing attribution captured by lib/attribution.js (no PII).
+// Null when unavailable — a lead is never blocked by attribution.
+function leadAttribution() {
+  try { return window.PPAttribution ? window.PPAttribution.getForLead() : null; } catch (e) { return null; }
+}
+
+// GA4 lead event, sent only to the GA4 property (never to Google Ads, so no duplicate conversions).
+function trackLeadAnalytics(formId, attribution) {
+  if (!GA4_MEASUREMENT_ID || typeof window.gtag !== 'function') return;
+  try {
+    const params = (attribution && window.PPAttribution) ? window.PPAttribution.toAnalyticsParams(attribution) : {};
+    window.gtag('event', 'generate_lead', Object.assign({ send_to: GA4_MEASUREMENT_ID, form_location: formId || 'unknown' }, params));
+  } catch (e) {}
+}
+
 // Sends a website lead to the serverless function, which creates a Housecall Pro lead.
 async function submitLead(data) {
+  const attribution = leadAttribution();
   try {
     const res = await fetch('https://optic-air-website.vercel.app/api/create-lead', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data),
+      body: JSON.stringify(attribution ? Object.assign({}, data, { attribution }) : data),
     });
     if (res.ok && typeof window.gtag === 'function') { window.gtag('event', 'conversion', { send_to: 'AW-16693139414/coP1CI_jnc4cENav9Jc-', value: 1.0, currency: 'CAD' }); }
+    if (res.ok) trackLeadAnalytics(data && data.page, attribution);
     return res.ok;
   } catch (e) {
     return false;
