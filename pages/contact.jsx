@@ -322,7 +322,7 @@ function ContactPage({ navigate }) {
                   </a>
                   <div className="info-row">
                     <span className="icon-bubble"><Icon.Clock/></span>
-                    <span><span className="l">Hours</span><span className="v">Mon–Sun 8am–5pm · 24/7 emergency</span></span>
+                    <span><span className="l">Hours</span><span className="v">Mon–Fri 8am–5pm · 24/7 emergency</span></span>
                   </div>
                   <div className="info-row">
                     <span className="icon-bubble"><Icon.Pin/></span>

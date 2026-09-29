@@ -193,7 +193,7 @@ function Footer({ navigate }) {
               <li><a href={`tel:${BIZ.phoneRaw}`}>{BIZ.phone}</a></li>
               <li><a href={`mailto:${BIZ.email}`}>{BIZ.email}</a></li>
               <li>{BIZ.address}</li>
-              <li style={{ marginTop: 10 }}><strong style={{ color: 'var(--c-ink)' }}>Hours:</strong> 8am–5pm Mon–Sun</li>
+              <li style={{ marginTop: 10 }}><strong style={{ color: 'var(--c-ink)' }}>Hours:</strong> 8am–5pm Mon–Fri</li>
               <li>24/7 Emergency Available</li>
               <li style={{ marginTop: 8, display: 'flex', gap: 12 }}>
                 <a href="https://www.instagram.com/opticairhvac/" aria-label="Instagram">Instagram</a>
@@ -389,12 +389,11 @@ function TrustBar() {
         <div className="label">All makes & models — Ruud dealer</div>
         <div className="brands">
           <div className="brand">Ruud</div>
-          <div className="brand" data-b="lennox">Lennox</div>
-          <div className="brand" data-b="bosch">BOSCH</div>
+          <div className="brand">Goodman</div>
           <div className="brand">Carrier</div>
-          <div className="brand" data-b="trane">Trane</div>
-          <div className="brand" data-b="napoleon">Napoleon</div>
-          <div className="brand">Mitsubishi</div>
+          <div className="brand">Bradford White</div>
+          <div className="brand">Applied Comfort</div>
+          <div className="brand">Tosot</div>
         </div>
       </div>
     </div>
@@ -433,13 +432,7 @@ async function submitLead(data) {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data),
     });
-    if (res.ok && window.gtag) {
-      window.gtag('event', 'conversion', {
-        'send_to': 'AW-16693139414/coP1CI_jnc4cENav9Jc-',
-        'value': 1.0,
-        'currency': 'CAD',
-      });
-    }
+    if (res.ok && typeof window.gtag === 'function') { window.gtag('event', 'conversion', { send_to: 'AW-16693139414/coP1CI_jnc4cENav9Jc-', value: 1.0, currency: 'CAD' }); }
     return res.ok;
   } catch (e) {
     return false;

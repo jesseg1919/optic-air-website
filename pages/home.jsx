@@ -28,7 +28,7 @@ function HomePage({ navigate, t }) {
                 </a>
               </div>
               <div className="hero-stats">
-                <div className="stat"><span className="n">15+ yrs</span><span className="l">Locally owned</span></div>
+                <div className="stat"><span className="n">15+ yrs</span><span className="l">HVAC experience</span></div>
                 <div className="stat"><span className="n">24/7</span><span className="l">Emergency service</span></div>
                 <div className="stat"><span className="n">5.0★</span><span className="l">Google reviews</span></div>
               </div>
