@@ -4,8 +4,8 @@
 //
 // Optional marketing attribution (see lib/attribution.js) arrives as body.attribution. It is untrusted:
 // it is re-validated against an allowlist here, and a missing/invalid value never blocks the lead.
-// Optional env var HCP_LEAD_SOURCE_MAP: JSON object renaming attribution labels to the exact
-// Housecall Pro lead-source names to use, e.g. {"Google Ads":"Google Ads - Website","Direct":"Website"}.
+// Optional env var HCP_LEAD_SOURCE_MAP: JSON object renaming any lead-source name below to a different
+// existing HCP lead source, e.g. {"QR / Printed Marketing":"QR Codes"}. Not needed while names match.
 let attributionLib = null;
 try {
   attributionLib = require('../lib/attribution.js');
@@ -14,9 +14,22 @@ try {
   console.error('[create-lead] attribution module unavailable:', e && e.message);
 }
 
-// Lead sources sent before attribution existed; still used whenever no attribution is available.
-const DEFAULT_LEAD_SOURCE = 'OpticAir Website';
-const DEFAULT_CUSTOMER_LEAD_SOURCE = 'Website';
+// Housecall Pro only accepts lead-source names that already exist in the account (anything else is
+// rejected with HTTP 400), so every attribution channel maps onto this fixed list. Placement detail
+// such as utm_content=lawn_sign stays in the lead note, never in the lead-source name.
+const HCP_SOURCE_BY_CHANNEL = {
+  paid_search: 'Google Ads',              // gclid/gbraid/wbraid or paid Google UTMs (Microsoft Ads → Website)
+  organic_search: 'Organic Search',
+  qr: 'QR / Printed Marketing',
+  offline: 'QR / Printed Marketing',      // utm_medium=print/flyer/sign…, utm_source=offline
+  social: 'Social',
+  paid_social: 'Social',
+  email: 'Email',
+  referral: 'Referral',
+  local: 'Google Business Profile',       // utm_source=gbp / gmb
+};
+// Direct visits, missing attribution, anything outside the list above, and the 400/422 fallback.
+const WEBSITE_LEAD_SOURCE = 'Website';
 
 function parseLeadSourceMap(json) {
   if (!json) return {};
@@ -29,13 +42,16 @@ function parseLeadSourceMap(json) {
   }
 }
 
-// Human-readable lead source for HCP, e.g. "Google Ads", "Lawn Sign QR", "Organic Search".
+// HCP lead source for the last meaningful touch — always one of the fixed names above.
 function resolveLeadSource(attribution, mapJson) {
   if (!attribution) return null;
-  const label = attributionLib.leadSource(attribution).label;
+  const { channel, label } = attributionLib.leadSource(attribution);
+  let source = Object.prototype.hasOwnProperty.call(HCP_SOURCE_BY_CHANNEL, channel)
+    ? HCP_SOURCE_BY_CHANNEL[channel] : WEBSITE_LEAD_SOURCE;
+  if (channel === 'paid_search' && label !== 'Google Ads') source = WEBSITE_LEAD_SOURCE;
   const map = parseLeadSourceMap(mapJson);
-  const mapped = Object.prototype.hasOwnProperty.call(map, label) ? map[label] : null;
-  return typeof mapped === 'string' && mapped.trim() ? mapped.trim().slice(0, 100) : label;
+  const mapped = Object.prototype.hasOwnProperty.call(map, source) ? map[source] : null;
+  return typeof mapped === 'string' && mapped.trim() ? mapped.trim().slice(0, 100) : source;
 }
 
 function describeTouch(t) {
@@ -149,25 +165,25 @@ module.exports = async function handler(req, res) {
     if (zip) addr.zip = zip;
   }
 
-  const customer = { first_name, notifications_enabled: false, lead_source: leadSource || DEFAULT_CUSTOMER_LEAD_SOURCE };
+  const customer = { first_name, notifications_enabled: false, lead_source: leadSource || WEBSITE_LEAD_SOURCE };
   if (last_name) customer.last_name = last_name;
   if (email) customer.email = email;
   if (phone) customer.mobile_number = phone;
   // Attach the address to the customer record so it carries over to the job (no manual entry needed).
   if (addr) customer.addresses = [addr];
 
-  const payload = { customer, lead_source: leadSource || DEFAULT_LEAD_SOURCE, note };
+  const payload = { customer, lead_source: leadSource || WEBSITE_LEAD_SOURCE, note };
   // Also set the lead's top-level address.
   if (addr) payload.address = addr;
 
   try {
     let r = await postLead(key, payload);
     // An attribution-derived lead source must never cost us the lead: if HCP rejects the request
-    // as invalid, resend once with the original fixed lead sources (the note keeps the attribution).
-    if (!r.ok && leadSource && (r.status === 400 || r.status === 422)) {
+    // as invalid, resend once with the default "Website" source (the note keeps the attribution).
+    if (!r.ok && leadSource && leadSource !== WEBSITE_LEAD_SOURCE && (r.status === 400 || r.status === 422)) {
       console.error('[create-lead] HCP rejected lead with attributed lead source; retrying with default', r.status);
-      customer.lead_source = DEFAULT_CUSTOMER_LEAD_SOURCE;
-      payload.lead_source = DEFAULT_LEAD_SOURCE;
+      customer.lead_source = WEBSITE_LEAD_SOURCE;
+      payload.lead_source = WEBSITE_LEAD_SOURCE;
       r = await postLead(key, payload);
     }
     if (!r.ok) {

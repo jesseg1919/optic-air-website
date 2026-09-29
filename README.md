@@ -45,14 +45,30 @@ This site deploys automatically to Vercel from the `main` branch. Push to `main`
   - **Last touch** is the latest tagged or referral visit. Direct visits don't replace it.
   - The window runs 90 days from the last tagged/referral visit.
 - **Sent:** `submitLead()` in `components.jsx` adds `attribution` to the request body. `api/create-lead.js` re-validates it and does two things:
-  - Sets the Housecall Pro `lead_source`, e.g. `Google Ads`, `Organic Search`, `Lawn Sign QR`, `Social`, `Referral`, `Direct`.
+  - Sets the Housecall Pro `lead_source` from the last touch, always one of the fixed names below.
   - Appends first/last-touch details and any Google click IDs to the lead note.
-  - With no attribution, the payload is exactly what it was before.
 - **Google Ads conversion:** unchanged. It still fires once, only after the API responds successfully.
+
+### Housecall Pro lead sources
+
+HCP rejects lead-source names that don't already exist (HTTP 400), so every visit maps onto this fixed list. The names must match the account's lead sources exactly.
+
+| Last touch | HCP lead source |
+|---|---|
+| `gclid` / `gbraid` / `wbraid`, or paid Google UTMs (`utm_source=google` + `cpc`, `ppc`, `display`…) | `Google Ads` |
+| Search-engine referrer, or `utm_medium=organic` | `Organic Search` |
+| `utm_medium=qr`, or print/offline UTMs (`utm_source=offline`, `utm_medium=print`, `flyer`, `direct_mail`…) | `QR / Printed Marketing` |
+| Social networks, organic or paid | `Social` |
+| `utm_medium=email`, or webmail referrers | `Email` |
+| Other websites' links, or `utm_medium=referral` | `Referral` |
+| `utm_source=gbp` / `gmb` | `Google Business Profile` |
+| Direct, no attribution, anything else (e.g. Microsoft Ads, unrecognised UTMs) | `Website` |
+
+If HCP still answers 400/422, the lead is resent once with `Website`. Placement details such as `utm_content=lawn_sign` appear only in the note.
 
 ### QR / printed-material URLs
 
-Give each printed placement its own `utm_content`. The HCP lead source becomes `<Content> QR`.
+Give each printed placement its own `utm_content`. Every QR lead gets the HCP source `QR / Printed Marketing`, and the note records which placement it came from.
 
 ```
 https://opticair.ca/contact?utm_source=offline&utm_medium=qr&utm_campaign=printed_materials&utm_content=lawn_sign
@@ -62,7 +78,7 @@ https://opticair.ca/contact?utm_source=offline&utm_medium=qr&utm_campaign=printe
 
 | Where | Setting | Purpose |
 |---|---|---|
-| Vercel env | `HCP_LEAD_SOURCE_MAP` (optional) | JSON that renames labels to exact HCP lead-source names, e.g. `{"Google Ads":"Google Ads - Website"}` |
+| Vercel env | `HCP_LEAD_SOURCE_MAP` (optional, not needed while names match) | JSON that renames one of the lead sources above to another existing HCP lead source, e.g. `{"QR / Printed Marketing":"QR Codes"}` |
 | `components.jsx` | `GA4_MEASUREMENT_ID` | Empty = off. Set it to the `G-…` ID once a GA4 tag is added to `index.html` to also send a GA4 `generate_lead` event (GA4 only, never to Google Ads). |
 
 ### Tests
